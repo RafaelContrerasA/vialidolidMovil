@@ -1,3 +1,35 @@
 <resources>
     <string name="app_name">Vialidolid</string>
+    <string name="title_activity_awa">awa</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+
+    <!--  Arreglo de estados  -->
+    <string-array name="estados">
+        <item>Michoacan</item>
+        <item>Jalisco</item>
+    </string-array>
+
+    <!--  Ciudades Michoacan  -->
+    <string-array name="cdMichoacan">
+        <item>Morelia</item>
+        <item>Patzcuaro</item>
+        <item>Apatzingan</item>
+        <item>Zitacuaro</item>
+    </string-array>
+
+    <!--  Ciudades Jalisco  -->
+    <string-array name="cdJalisco">
+        <item>Guadalajara</item>
+        <item>Zapopan</item>
+        <item>Tlaquepaque</item>
+    </string-array>
+
+
 </resources>
