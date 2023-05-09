@@ -12,6 +12,15 @@
         android:theme="@style/Theme.Vialidolid"
         tools:targetApi="31">
         <activity
+            android:name=".reporte_bacheo_complet"
+            android:exported="false" />
+        <activity
+            android:name=".reporte_bache"
+            android:exported="false" />
+        <activity
+            android:name=".nuevo_reporte"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -20,6 +29,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

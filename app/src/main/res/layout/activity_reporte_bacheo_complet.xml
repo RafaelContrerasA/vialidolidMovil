@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".reporte_bacheo_complet">
+
+    <TextView
+        android:id="@+id/tvRepComp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reporte \nCompletado"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="42dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvRExito"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.559" />
+
+    <TextView
+        android:id="@+id/tvRExito"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="64dp"
+        android:text="Su reporte fue generado \nexitosamente"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/btGReporte"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btGReporte"
+        style="@style/button"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#1573fe"
+        android:text="REGRESAR A PANTALLA DE INICIO"
+        app:layout_constraintBottom_toTopOf="@+id/btPantInic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btPantInic"
+        style="@style/button"
+        android:layout_marginBottom="280dp"
+        android:backgroundTint="#1573fe"
+        android:text="VER MIS REPORTES"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
