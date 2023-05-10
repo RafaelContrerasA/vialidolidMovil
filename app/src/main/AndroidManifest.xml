@@ -12,6 +12,24 @@
         android:theme="@style/Theme.Vialidolid"
         tools:targetApi="31">
         <activity
+            android:name=".passwordRestored"
+            android:exported="false" />
+        <activity
+            android:name=".enterNewPassword"
+            android:exported="false" />
+        <activity
+            android:name=".recoverPassword"
+            android:exported="false" />
+        <activity
+            android:name=".accountCreated"
+            android:exported="false" />
+        <activity
+            android:name=".enterCode"
+            android:exported="false" />
+        <activity
+            android:name=".validatePhone"
+            android:exported="false" />
+        <activity
             android:name=".newAccount"
             android:exported="false" />
         <activity
