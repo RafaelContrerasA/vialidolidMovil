@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:gravity="center"
-        android:text="Ingresa el código de 6 digitos"
+        android:text="Se envió un código de confirmación a su teléfono (Numero de telefono)"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,12 +50,21 @@
 
 
     <Button
-        android:id="@+id/btLogin"
+        android:id="@+id/btConfirmar"
         style="@style/button"
         android:layout_marginTop="8dp"
         android:backgroundTint="@color/light_blue"
         android:text="Confirmar código"
         app:layout_constraintStart_toStartOf="@+id/etCode"
         app:layout_constraintTop_toBottomOf="@+id/etCode" />
+
+    <Button
+        android:id="@+id/btReenviar"
+        style="@style/button"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/light_blue"
+        android:text="Reenviar código"
+        app:layout_constraintStart_toStartOf="@+id/btConfirmar"
+        app:layout_constraintTop_toBottomOf="@+id/btConfirmar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

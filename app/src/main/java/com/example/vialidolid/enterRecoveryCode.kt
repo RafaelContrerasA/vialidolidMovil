@@ -1,8 +1,9 @@
 package com.example.vialidolid
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
+import android.content.Intent
 import android.util.Log
 import android.widget.*
 import com.android.volley.Request
@@ -15,7 +16,8 @@ import java.util.concurrent.TimeUnit
 
 // this stores the phone number of the user
 
-class enterCode : AppCompatActivity() {
+
+class enterRecoveryCode : AppCompatActivity() {
     var number : String =""
 
     // create instance of firebase auth
@@ -25,10 +27,12 @@ class enterCode : AppCompatActivity() {
     lateinit var storedVerificationId:String
     lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
     private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_enter_code)
-        //Colocar el telefono del usuario en pantalla
+        setContentView(R.layout.activity_enter_recovery_code)
+        number = intent.getStringExtra("telefono").toString()
+
         var tvPrompt = findViewById<TextView>(R.id.tvPrompt)
         tvPrompt.text = "Se envió un código de confirmación a su teléfono (${intent.getStringExtra("telefono")})"
 
@@ -73,7 +77,7 @@ class enterCode : AppCompatActivity() {
         }
 
         //Enviar codigo de autenticacion al iniciar la actividad
-        login()
+        enviarCodigo()
 
         //listener de boton confirmar
         // fill otp and call the on click on button
@@ -87,11 +91,10 @@ class enterCode : AppCompatActivity() {
                 Toast.makeText(this,"Ingrese el código", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
-
-
-    private fun login() {
+    private fun enviarCodigo() {
         number = intent.getStringExtra("telefono").toString()
 
         // get the phone number from edit text and append the country cde with it
@@ -99,7 +102,7 @@ class enterCode : AppCompatActivity() {
             number = "+52$number"
             sendVerificationCode(number)
         }else{
-            Toast.makeText(this,"Enter mobile number", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,"Ingresa un numero de teléfono", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -123,7 +126,10 @@ class enterCode : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     println("Verificacion dentro de funcion")
-                    insertCiudadano()
+                    val intent = Intent(this, enterNewPassword::class.java)
+                    intent.putExtra("telefono", number)
+                    startActivity(intent)
+                    finish()
 
                 } else {
                     // Sign in failed, display a message and update the UI
@@ -134,49 +140,4 @@ class enterCode : AppCompatActivity() {
                 }
             }
     }
-
-    fun insertCiudadano(){
-        //url de archivo para insertar en PHP
-        val url = "http://192.168.1.66/rest/insertCiudadano.php"
-        val queue = Volley.newRequestQueue(this)
-        var resultadoPost = object : StringRequest(Request.Method.POST, url,
-            Response.Listener<String>{ response ->
-                Toast.makeText(this,"Usuario Insertado",Toast.LENGTH_LONG).show()
-                println("Ciudadano ingresado")
-                val intent = Intent(this , accountCreated::class.java)
-                startActivity(intent)
-                finish()
-
-            }, Response.ErrorListener{ error ->
-                Toast.makeText(this,"Error de conexión, reintentelo mas tarde",Toast.LENGTH_LONG).show()
-                println("Insercion fallida")
-                finish()
-            }){
-            override fun getParams(): MutableMap<String, String>? {
-                val parametros = HashMap<String,String>()
-                parametros["nombre"] = intent.getStringExtra("nombre").toString()
-                println(intent.getStringExtra("nombre").toString())
-                parametros["apellido_paterno"] = intent.getStringExtra("apellido_paterno").toString()
-                println(intent.getStringExtra("apellido_paterno").toString())
-                parametros["apellido_materno"] = intent.getStringExtra("apellido_materno").toString()
-                println(intent.getStringExtra("apellido_materno").toString())
-                parametros["correo"] = intent.getStringExtra("correo").toString()
-                println(intent.getStringExtra("correo").toString())
-                parametros["contraseña"] = intent.getStringExtra("contraseña").toString()
-                println(intent.getStringExtra("contraseña").toString())
-                parametros["telefono"] = intent.getStringExtra("telefono").toString()
-                println(intent.getStringExtra("contraseña").toString())
-                parametros["estado"] = intent.getStringExtra("estado").toString()
-                println(intent.getStringExtra("estado").toString())
-                parametros["ciudad"] = intent.getStringExtra("ciudad").toString()
-                println(intent.getStringExtra("ciudad").toString())
-                parametros["n_penalizaciones"] = "0"
-                return parametros
-            }
-        }
-        queue.add(resultadoPost)
-    }
-
 }
-
-
