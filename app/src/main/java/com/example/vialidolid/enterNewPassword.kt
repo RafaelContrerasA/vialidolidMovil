@@ -55,7 +55,7 @@ class enterNewPassword : AppCompatActivity() {
     }
     fun actualizarContraseña(){
         //url de archivo para insertar en PHP
-        val url = "http://192.168.1.66/rest/updateContraseña.php"
+        val url = "http://${resources.getString(R.string.server_ip)}/rest/updateContraseña.php"
         val queue = Volley.newRequestQueue(this)
         var resultadoPost = object : StringRequest(Request.Method.POST, url,
             Response.Listener<String>{ response ->

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".userProfile">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Mis datos"
+            android:textColor="@color/black"
+            android:textSize="50sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="135dp"
+            android:layout_height="91dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+            app:srcCompat="@drawable/account_circle" />
+
+        <EditText
+            android:id="@+id/etNombre"
+            style="@style/form"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Nombre"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <ImageView
+            android:id="@+id/iVe1"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/pencil"
+            app:layout_constraintBottom_toBottomOf="@+id/etNombre"
+            app:layout_constraintEnd_toEndOf="@+id/etNombre"
+            app:layout_constraintTop_toTopOf="@+id/etNombre" />
+
+        <EditText
+            android:id="@+id/etApellidoPaterno"
+            style="@style/form"
+            android:layout_width="167dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/form_bg"
+            android:hint="Apellido Paterno"
+            app:layout_constraintStart_toStartOf="@+id/etNombre"
+            app:layout_constraintTop_toBottomOf="@+id/etNombre" />
+
+        <ImageView
+            android:id="@+id/iVe2"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/pencil"
+            app:layout_constraintBottom_toBottomOf="@+id/etApellidoPaterno"
+            app:layout_constraintEnd_toEndOf="@+id/etApellidoPaterno"
+            app:layout_constraintTop_toTopOf="@+id/etApellidoPaterno" />
+
+        <EditText
+            android:id="@+id/etApellidoMaterno"
+            style="@style/form"
+            android:layout_width="167dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/form_bg"
+            android:hint="Apellido Materno"
+            app:layout_constraintEnd_toEndOf="@+id/etNombre"
+            app:layout_constraintTop_toBottomOf="@+id/etNombre" />
+
+        <ImageView
+            android:id="@+id/iVe3"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/pencil"
+            app:layout_constraintBottom_toBottomOf="@+id/etApellidoMaterno"
+            app:layout_constraintEnd_toEndOf="@+id/etApellidoMaterno"
+            app:layout_constraintTop_toTopOf="@+id/etApellidoMaterno" />
+
+        <EditText
+            android:id="@+id/etCorreo"
+            style="@style/form"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="Correo"
+            android:inputType="textEmailAddress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etApellidoPaterno" />
+
+        <ImageView
+            android:id="@+id/iVe4"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/pencil"
+            app:layout_constraintBottom_toBottomOf="@+id/etCorreo"
+            app:layout_constraintEnd_toEndOf="@+id/etCorreo"
+            app:layout_constraintTop_toTopOf="@+id/etCorreo" />
+
+        <EditText
+            android:id="@+id/etContraseña"
+            style="@style/form"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:digits="1234567890"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etCorreo" />
+
+        <ImageView
+            android:id="@+id/iVe5"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/pencil"
+            app:layout_constraintBottom_toBottomOf="@+id/etContraseña"
+            app:layout_constraintEnd_toEndOf="@+id/etContraseña"
+            app:layout_constraintTop_toTopOf="@+id/etContraseña" />
+
+
+
+
+        <Button
+            android:id="@+id/btSaveChanges"
+            style="@style/button"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/light_blue"
+            android:text="Guardar cambios"
+            app:layout_constraintStart_toStartOf="@+id/etContraseña"
+            app:layout_constraintTop_toBottomOf="@+id/etContraseña" />
+
+        <Button
+            android:id="@+id/btDeleteAccount"
+            style="@style/button"
+            android:layout_marginTop="60dp"
+            android:backgroundTint="@color/red"
+            android:text="Cerrar Sesion"
+            app:layout_constraintStart_toStartOf="@+id/btSaveChanges"
+            app:layout_constraintTop_toBottomOf="@+id/btSaveChanges" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

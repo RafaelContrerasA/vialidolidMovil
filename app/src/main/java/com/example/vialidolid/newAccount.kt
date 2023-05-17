@@ -55,7 +55,7 @@ class newAccount : AppCompatActivity() {
                 var respuesta = "Pendiente"
                 val queue = Volley.newRequestQueue(this)
                 var telefono = etTelefono?.text.toString()
-                val url = "http://192.168.1.66/rest/telefonoDisponible.php?telefono=$telefono"
+                val url = "http://${resources.getString(R.string.server_ip)}/rest/telefonoDisponible.php?telefono=$telefono"
                 println(url)
                 val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
                     Response.Listener {response ->
@@ -91,7 +91,7 @@ class newAccount : AppCompatActivity() {
 
    /* fun insertCiudadano(spinnerEstado:Spinner, spinnerCiudad:Spinner){
         //url de archivo para insertar en PHP
-        val url = "http://192.168.1.66/rest/insertCiudadano.php"
+        val url = "http://${resources.getString(R.string.server_ip)}/rest/insertCiudadano.php"
         val queue = Volley.newRequestQueue(this)
         var resultadoPost = object : StringRequest(Request.Method.POST, url,
             Response.Listener<String>{response ->

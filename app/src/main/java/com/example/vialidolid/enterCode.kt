@@ -137,7 +137,7 @@ class enterCode : AppCompatActivity() {
 
     fun insertCiudadano(){
         //url de archivo para insertar en PHP
-        val url = "http://192.168.1.66/rest/insertCiudadano.php"
+        val url = "http://${resources.getString(R.string.server_ip)}/rest/insertCiudadano.php"
         val queue = Volley.newRequestQueue(this)
         var resultadoPost = object : StringRequest(Request.Method.POST, url,
             Response.Listener<String>{ response ->

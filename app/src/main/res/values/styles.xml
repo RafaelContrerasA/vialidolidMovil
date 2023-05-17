@@ -5,7 +5,9 @@
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingBottom">16dp</item>
         <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">32dp</item>
         <item name="android:textSize">16dp</item>
+        <item name="android:width">355dp</item>
         <item name="android:ems">19</item>
     </style>
 

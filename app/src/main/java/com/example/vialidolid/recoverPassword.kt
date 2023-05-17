@@ -29,7 +29,7 @@ class recoverPassword : AppCompatActivity() {
                 var respuesta = "Pendiente"
                 val queue = Volley.newRequestQueue(this)
                 var telefono = etTelefono?.text.toString()
-                val url = "http://192.168.1.66/rest/telefonoDisponible.php?telefono=$telefono"
+                val url = "http://${resources.getString(R.string.server_ip)}/rest/telefonoDisponible.php?telefono=$telefono"
                 println(url)
                 val jsonObjectRequest = JsonObjectRequest(
                     Request.Method.GET, url, null,
