@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".reporte_suministro_agua"
+    android:background="@color/morado_vialidolid">
+
+    <Spinner
+        android:id="@+id/spSA"
+        android:layout_width="167dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="31dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/form_bg"
+        app:layout_constraintBottom_toTopOf="@+id/etUbicacionAP"
+        app:layout_constraintEnd_toEndOf="@+id/etUbicacionAP"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/etUbicacionAP"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="185dp"
+        android:layout_height="52dp"
+        android:text="Nuevo reporte\nSuministro de agua"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/imageView" app:layout_constraintTop_toTopOf="@+id/imageView"
+        android:layout_marginEnd="72dp" app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="135dp"
+        android:layout_height="91dp"
+        app:srcCompat="@drawable/account_circle"
+        app:layout_constraintTop_toTopOf="@+id/guideline7" app:layout_constraintStart_toStartOf="@+id/guideline9"/>
+
+    <EditText
+        android:id="@+id/etDescripcionAP"
+        style="@style/form"
+        android:layout_width="355dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="15dp"
+        android:hint="Descripción"
+        app:layout_constraintEnd_toEndOf="@+id/eteClavPredio"
+        app:layout_constraintStart_toStartOf="@+id/eteClavPredio"
+        app:layout_constraintTop_toBottomOf="@+id/eteClavPredio" />
+
+    <EditText
+        android:id="@+id/etReferenciasAP"
+        style="@style/form"
+        android:layout_width="355dp"
+        android:layout_height="73dp"
+        android:layout_marginTop="15dp"
+        android:hint="Referencias"
+        app:layout_constraintEnd_toEndOf="@+id/etDescripcionAP"
+        app:layout_constraintStart_toStartOf="@+id/etDescripcionAP"
+        app:layout_constraintTop_toBottomOf="@+id/etDescripcionAP" />
+
+    <Button
+        android:id="@+id/btCancelar"
+        style="@style/button"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="#FF0B0B"
+        android:text="Cancelar"
+        app:layout_constraintEnd_toEndOf="@+id/btGReporte"
+        app:layout_constraintStart_toStartOf="@+id/btGReporte"
+        app:layout_constraintTop_toBottomOf="@+id/btGReporte" />
+    <EditText
+        android:id="@+id/etUbicacionAP"
+        style="@style/form"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Ubicación"
+        app:layout_constraintTop_toTopOf="@+id/guideline8" app:layout_constraintStart_toStartOf="@+id/guideline9"/>
+
+    <EditText
+        android:id="@+id/eteClavPredio"
+        style="@style/form"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:hint="Clave de predio"
+        app:layout_constraintBottom_toTopOf="@+id/etDescripcionAP"
+        app:layout_constraintEnd_toEndOf="@+id/etUbicacionAP"
+        app:layout_constraintStart_toStartOf="@+id/etUbicacionAP"
+        app:layout_constraintTop_toBottomOf="@+id/etUbicacionAP" />
+
+    <Button
+        android:id="@+id/btGReporte"
+        style="@style/button"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="#1573fe"
+        android:onClick="insertar"
+        android:text="Generar Reporte"
+        app:layout_constraintEnd_toEndOf="@+id/etReferenciasAP"
+        app:layout_constraintStart_toStartOf="@+id/etReferenciasAP"
+        app:layout_constraintTop_toBottomOf="@+id/etReferenciasAP" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.04" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.29" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

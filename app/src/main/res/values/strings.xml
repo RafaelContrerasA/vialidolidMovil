@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Vialidolid</string>
+
+    <!--  Arreglo de estados  -->
+    <string-array name="categoria">
+        <item></item>
+        <item>Alumbrado público</item>
+        <item>Bache</item>
+        <item>Maltrato animal</item>
+        <item>Reporte vial</item>
+        <item>Suministro de agua</item>
+    </string-array>
 </resources>

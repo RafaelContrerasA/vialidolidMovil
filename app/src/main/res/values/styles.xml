@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="form" >
+        <item name="android:background">@drawable/form_bg</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:ems">19</item>
+    </style>
+
+    <style name="button" >
+        <item name="android:layout_width">355dp</item>
+        <item name="android:layout_height">60dp</item>
+
+    </style>
+</resources>
