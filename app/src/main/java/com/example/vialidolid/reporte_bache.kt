@@ -71,7 +71,7 @@ class reporte_bache : AppCompatActivity() {
 
     //---------------- Función para mandar los datos a la base de datos
     fun insertar(view: View){
-        val url="http://192.168.1.64/001%20-%20Kotlin/insertarReportebache.php"
+        val url="http://${resources.getString(R.string.server_ip)}/rest/insertarReportebache.php"
         val queue= Volley.newRequestQueue(this)
         var resultadoPost = object : StringRequest(Request.Method.POST,url,
             Response.Listener<String> { response ->

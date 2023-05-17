@@ -51,6 +51,13 @@ class userProfile : AppCompatActivity() {
 
         println(etNombre?.text.toString())
 
+        //Listener temporal para abrir ventana hacer reporte, a elimirse
+        val temp =findViewById<ImageView>(R.id.imageView)
+        temp.setOnClickListener {
+            val i = Intent(this@userProfile, nuevo_reporte::class.java)
+            startActivity(i)
+        }
+
         //Listener boton editar1
         val edit1 =findViewById<ImageView>(R.id.iVe1)
         edit1.setOnClickListener {
