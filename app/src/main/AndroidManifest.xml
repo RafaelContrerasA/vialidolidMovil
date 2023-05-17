@@ -12,6 +12,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Vialidolid"
+
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
@@ -50,6 +51,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".reporte_vial"
+            android:exported="false" />
+        <activity
+            android:name=".reporte_suministro_agua"
+            android:exported="false" />
+        <activity
+            android:name=".reporte_maltrato_animal"
+            android:exported="false" />
+        <activity
+            android:name=".reporte_comp"
+            android:exported="false" />
+        <activity
+            android:name=".reporte_bache"
+            android:exported="false" />
+        <activity
+            android:name=".reporte_alumbrado_publico"
+            android:exported="false" />
+        <activity
+            android:name=".nuevo_reporte"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
