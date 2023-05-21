@@ -5,7 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import androidx.fragment.app.Fragment
-
+import android.location.LocationRequest.Builder
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,12 +23,19 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 import androidx.appcompat.app.AlertDialog
 import android.provider.Settings
+import androidx.core.app.ActivityCompat.finishAffinity
+import com.google.android.gms.location.*
 
 class MapsFragment : Fragment() {
     val coordenadas = mutableMapOf<String, LatLng>()
 
     private lateinit var map : GoogleMap
     private var LOCATION_PERMISSION_REQUEST = 1
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    public lateinit var locationRequest: LocationRequest
+    private lateinit var locationCallback: LocationCallback
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val coordenada1 = LatLng(-33.9, 151.0)
@@ -36,7 +43,7 @@ class MapsFragment : Fragment() {
         coordenadas["Coordenada 1"] = coordenada1
         coordenadas["Coordenada 2"] = coordenada2
 
-        
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
     }
 
@@ -78,6 +85,8 @@ class MapsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
+        ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST)
+
     }
 
     private fun getLocationAccess() {
@@ -88,12 +97,15 @@ class MapsFragment : Fragment() {
         ) {
             map.isMyLocationEnabled = true
             checkLocationEnabled()
+            getLocationUpdates()
+            startLocationUpdates()
         } else {
             ActivityCompat.requestPermissions(
                 requireActivity(),
                 arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
                 LOCATION_PERMISSION_REQUEST
             )
+            //map.isMyLocationEnabled = true
         }
     }
 
@@ -120,17 +132,46 @@ class MapsFragment : Fragment() {
         dialog.show()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,  grantResults:
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,  grantResults:
     IntArray) {
         if(requestCode == LOCATION_PERMISSION_REQUEST){
             if(grantResults.contains(PackageManager.PERMISSION_GRANTED)){
-                map.isMyLocationEnabled = true
+                getLocationAccess()
+                println("Entre aqui")
+                //TODO wachear que no haga bucle
             }
             else{
                 Toast.makeText(requireContext(),"No se proporcionó permisos", Toast.LENGTH_LONG).show()
+                requireActivity().finishAffinity()
             }
 
         }
+    }
+
+    private fun getLocationUpdates(){
+        //Parameteres for location Request
+        locationRequest= LocationRequest.Builder(3000)
+            .apply {
+                setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+                setMinUpdateIntervalMillis(2000)
+            }.build()
+
+        locationCallback = object : LocationCallback(){
+            override fun onLocationResult(locationResult: LocationResult) {
+                if(locationResult.locations.isNotEmpty()){
+                    val location = locationResult.lastLocation
+                    if(location != null){
+                        val latLng = LatLng(location.latitude,location.longitude)
+                        val markerOptions = MarkerOptions().position(latLng)
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,16f))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun startLocationUpdates(){
+        fusedLocationClient.requestLocationUpdates(locationRequest,locationCallback,null)
     }
 
 
