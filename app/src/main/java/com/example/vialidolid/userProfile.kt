@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
@@ -55,6 +56,13 @@ class userProfile : AppCompatActivity() {
         val temp =findViewById<ImageView>(R.id.imageView)
         temp.setOnClickListener {
             val i = Intent(this@userProfile, nuevo_reporte::class.java)
+            startActivity(i)
+        }
+
+        //Listener temporal para abrir ventana hacer reporte, a elimirse
+        val temp2 =findViewById<TextView>(R.id.tvTitle)
+        temp2.setOnClickListener {
+            val i = Intent(this@userProfile, MainActivity::class.java)
             startActivity(i)
         }
 
@@ -110,6 +118,7 @@ class userProfile : AppCompatActivity() {
 
             // on below line we are opening our mainactivity by calling intent
             val i = Intent(this@userProfile, loginScreen::class.java)
+            i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(i)
             finish()
         }
@@ -128,7 +137,7 @@ class userProfile : AppCompatActivity() {
                 etApellidoPaterno?.setText(response.getString("apellido_paterno"))
                 etApellidoMaterno?.setText(response.getString("apellido_materno"))
                 etCorreo?.setText(response.getString("correo"))
-                etContraseña?.setText(response.getString("contraseña"))
+                etContraseña?.setText(response.getString("contrasena"))
             },
             Response.ErrorListener{ error ->
                 Toast.makeText(this,"Error de conexion ${error.toString()}", Toast.LENGTH_LONG).show()

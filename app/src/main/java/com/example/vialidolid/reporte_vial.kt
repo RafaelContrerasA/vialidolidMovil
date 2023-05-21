@@ -34,18 +34,22 @@ class reporte_vial : AppCompatActivity() {
 
                         val intent = Intent(this@reporte_vial, reporte_alumbrado_publico::class.java)
                         startActivity(intent)
+                        finish()
                     }
                     "Bache" -> {
                         val intent = Intent(this@reporte_vial,reporte_bache::class.java)
                         startActivity(intent)
+                        finish()
                     }
                     "Maltrato animal" -> {
                         val intent = Intent(this@reporte_vial,reporte_maltrato_animal::class.java)
                         startActivity(intent)
+                        finish()
                     }
                     "Suministro de agua" -> {
                         val intent = Intent(this@reporte_vial, reporte_suministro_agua::class.java)
                         startActivity(intent)
+                        finish()
                     }
 
                 }
@@ -56,9 +60,7 @@ class reporte_vial : AppCompatActivity() {
         }
         val btCancelar = findViewById<Button>(R.id.btCancelar)
         btCancelar.setOnClickListener(View.OnClickListener {
-            val intent = Intent(this@reporte_vial,nuevo_reporte::class.java)
-            startActivity(intent)
-            borrarEditText()
+            finish()
         })
     }
     //---------------- Función para mandar los datos a la base de datos

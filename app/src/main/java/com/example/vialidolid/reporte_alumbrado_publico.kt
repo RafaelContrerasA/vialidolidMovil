@@ -37,24 +37,24 @@ class reporte_alumbrado_publico : AppCompatActivity() {
                     "Bache" -> {
                         val intent = Intent(this@reporte_alumbrado_publico,reporte_bache::class.java)
                         startActivity(intent)
-                        borrarEditText()
+                        finish()
                     }
                     "Maltrato animal" -> {
-                        borrarEditText()
                         val intent = Intent(this@reporte_alumbrado_publico,reporte_maltrato_animal::class.java)
                         startActivity(intent)
+                        finish()
 
                     }
                     "Reporte vial" -> {
-                        borrarEditText()
                         val intent = Intent(this@reporte_alumbrado_publico, reporte_vial::class.java)
                         startActivity(intent)
+                        finish()
 
                     }
                     "Suministro de agua" -> {
-                        borrarEditText()
                         val intent = Intent(this@reporte_alumbrado_publico, reporte_suministro_agua::class.java)
                         startActivity(intent)
+                        finish()
                     }
                 }
             }
@@ -65,8 +65,7 @@ class reporte_alumbrado_publico : AppCompatActivity() {
         val btCancelar = findViewById<Button>(R.id.btCancelar)
         btCancelar.setOnClickListener(View.OnClickListener {
             val intent = Intent(this@reporte_alumbrado_publico,nuevo_reporte::class.java)
-            startActivity(intent)
-            borrarEditText()
+            finish()
         })
 
         var et1 = findViewById<EditText>(R.id.etUbicacionAP)

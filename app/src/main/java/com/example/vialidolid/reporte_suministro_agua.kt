@@ -37,18 +37,22 @@ class reporte_suministro_agua : AppCompatActivity() {
 
                         val intent = Intent(this@reporte_suministro_agua, reporte_alumbrado_publico::class.java)
                         startActivity(intent)
+                        finish()
                     }
                     "Bache" -> {
                         val intent = Intent(this@reporte_suministro_agua,reporte_bache::class.java)
                         startActivity(intent)
+                        finish()
                     }
                     "Maltrato animal" -> {
                         val intent = Intent(this@reporte_suministro_agua,reporte_maltrato_animal::class.java)
                         startActivity(intent)
+                        finish()
                     }
                     "Reporte vial" -> {
                         val intent = Intent(this@reporte_suministro_agua,reporte_vial::class.java)
                         startActivity(intent)
+                        finish()
                     }
 
                 }
@@ -60,9 +64,7 @@ class reporte_suministro_agua : AppCompatActivity() {
         }
         val btCancelar = findViewById<Button>(R.id.btCancelar)
         btCancelar.setOnClickListener(View.OnClickListener {
-            val intent = Intent(this@reporte_suministro_agua,nuevo_reporte::class.java)
-            startActivity(intent)
-            borrarEditText()
+            finish()
         })
     }
 

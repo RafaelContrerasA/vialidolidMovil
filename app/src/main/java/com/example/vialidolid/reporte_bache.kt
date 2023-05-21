@@ -1,10 +1,15 @@
 package com.example.vialidolid
 
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
@@ -14,6 +19,7 @@ class reporte_bache : AppCompatActivity() {
     var etUbicacion: EditText? = null
     var etDescripcion: EditText? = null
     var etReferencias: EditText? = null
+    var gpsActivado = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reporte_bache)
@@ -21,6 +27,34 @@ class reporte_bache : AppCompatActivity() {
         etDescripcion = findViewById(R.id.etDescripcionAP)
         etReferencias = findViewById(R.id.etReferenciasAP)
         etUbicacion = findViewById(R.id.etUbicacionAP)
+
+
+        //listener obtener ubicacion
+        var ubicacionListener = findViewById<EditText>(R.id.etUbicacionAP)
+        ubicacionListener.setOnClickListener{
+            if(ubicacionHabilitada()){
+                AlertDialog.Builder(this)
+                    .setTitle("¿Activar Ubicación?")
+                    .setMessage("Obtener la ubicacion GPS actual para crear el reporte")
+                    .setPositiveButton("Activar",
+                        DialogInterface.OnClickListener{dialog, which ->
+                            activarUbicacion()
+
+                        }
+                        )
+                    .setNegativeButton("Rechazar",
+                        DialogInterface.OnClickListener{dialog, which ->
+                            gpsActivado = false
+                        }
+                        )
+                    .setCancelable(true)
+                    .show()
+            }
+            else{
+
+            }
+        }
+
 
         //------------------------------------- SPINNER
         var arrayCategoria = resources.getStringArray(R.array.categoria)
@@ -37,22 +71,22 @@ class reporte_bache : AppCompatActivity() {
                     "Alumbrado público" -> {
                         val intent = Intent(this@reporte_bache,reporte_alumbrado_publico::class.java)
                         startActivity(intent)
-                        borrarEditText()
+                        finish()
                     }
                     "Maltrato animal" -> {
                         val intent = Intent(this@reporte_bache,reporte_maltrato_animal::class.java)
                         startActivity(intent)
-                        borrarEditText()
+                        finish()
                     }
                     "Reporte vial" -> {
                         val intent = Intent(this@reporte_bache, reporte_vial::class.java)
                         startActivity(intent)
-                        borrarEditText()
+                        finish()
                     }
                     "Suministro de agua" -> {
                         val intent = Intent(this@reporte_bache, reporte_suministro_agua::class.java)
                         startActivity(intent)
-                        borrarEditText()
+                        finish()
                     }
                 }
             }
@@ -63,9 +97,7 @@ class reporte_bache : AppCompatActivity() {
         }
         val btCancelar = findViewById<Button>(R.id.btCancelar)
         btCancelar.setOnClickListener(View.OnClickListener {
-            val intent = Intent(this@reporte_bache,nuevo_reporte::class.java)
-            startActivity(intent)
-            borrarEditText()
+            finish()
         })
     }
 
@@ -92,6 +124,24 @@ class reporte_bache : AppCompatActivity() {
         val intent = Intent(this@reporte_bache,reporte_comp::class.java)
         startActivity(intent)
 
+
+    }
+
+    fun ubicacionHabilitada(): Boolean{
+        var locationManager: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            return true
+        }
+        if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+            return true
+        }
+
+        return false
+    }
+
+    fun activarUbicacion(){
+        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+        startActivity(intent)
 
     }
 
