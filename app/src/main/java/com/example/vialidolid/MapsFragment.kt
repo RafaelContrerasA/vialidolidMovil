@@ -58,7 +58,7 @@ class MapsFragment : Fragment() {
          * user has installed Google Play services and returned to the app.
          */
         map = googleMap
-        val sydney = LatLng(-34.0, 151.0)
+        /*val sydney = LatLng(-34.0, 151.0)
         googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
 
@@ -68,7 +68,7 @@ class MapsFragment : Fragment() {
 
 
         googleMap.addMarker(MarkerOptions().position(coordenadas["Coordenada 1"] as LatLng).title("Marker in Sydney"))
-        googleMap.addMarker(MarkerOptions().position(coordenadas["Coordenada 2"] as LatLng).title("Marker in Sydney"))
+        googleMap.addMarker(MarkerOptions().position(coordenadas["Coordenada 2"] as LatLng).title("Marker in Sydney"))*/
 
         getLocationAccess()
     }

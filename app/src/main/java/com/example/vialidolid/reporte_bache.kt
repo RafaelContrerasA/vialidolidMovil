@@ -28,18 +28,18 @@ import kotlin.collections.HashMap
 class reporte_bache : AppCompatActivity() {
     var etDescripcion: EditText? = null
     var etReferencias: EditText? = null
-    var gpsActivado = true
 
     //Obtener las coordenadas actuales y colocarlas dentro del editText
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private val LOCATION_PERMISSION_REQUEST_CODE = 1
-    private var etUbicacion: EditText? = null
     private lateinit var geocoder: Geocoder
+    private val LOCATION_PERMISSION_REQUEST_CODE = 1
+
 
     //Ubicacion por defecto en caso de no poder obtener la ubicacion del usuario.
+    private var etUbicacion: EditText? = null
     private var lat: Double = 19.7040
     private var lng: Double = -101.1908
-    private var calle : String? = "Guillermo Prieto 314"
+    private var calle : String? = "Guillermo Prieto 314,"
     private var colonia : String? = "Centro histórico de Morelia"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,30 +51,10 @@ class reporte_bache : AppCompatActivity() {
         etUbicacion = findViewById(R.id.etUbicacionAP)
 
 
-        //listener obtener ubicacion
+        //listener ubicacion
         var ubicacionListener = findViewById<EditText>(R.id.etUbicacionAP)
         ubicacionListener.setOnClickListener{
-            if(ubicacionHabilitada()){
-                AlertDialog.Builder(this)
-                    .setTitle("¿Activar Ubicación?")
-                    .setMessage("Obtener la ubicacion GPS actual para crear el reporte")
-                    .setPositiveButton("Activar",
-                        DialogInterface.OnClickListener{dialog, which ->
-                            activarUbicacion()
 
-                        }
-                        )
-                    .setNegativeButton("Rechazar",
-                        DialogInterface.OnClickListener{dialog, which ->
-                            gpsActivado = false
-                        }
-                        )
-                    .setCancelable(true)
-                    .show()
-            }
-            else{
-
-            }
         }
 
 
@@ -155,32 +135,6 @@ class reporte_bache : AppCompatActivity() {
 
     }
 
-    fun ubicacionHabilitada(): Boolean{
-        var locationManager: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            return true
-        }
-        if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
-            return true
-        }
-
-        return false
-    }
-
-    fun activarUbicacion(){
-        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-        startActivity(intent)
-
-    }
-
-    fun borrarEditText() {
-        val ubi = findViewById<EditText>(R.id.etUbicacionAP)
-        ubi.setText(null)
-        val desc = findViewById<EditText>(R.id.etDescripcionAP)
-        desc.setText(null)
-        val ref = findViewById<EditText>(R.id.etReferenciasAP)
-        ref.setText(null)
-    }
 
     private fun getLocation() {
         if (ContextCompat.checkSelfPermission(
@@ -196,17 +150,28 @@ class reporte_bache : AppCompatActivity() {
                         val locationText = "Lat: $latitude, Long: $longitude"
                         var fullAddress = geocoder.getFromLocation(latitude, longitude, 1)
                         showToast(locationText)
-                        println("Locale: ${fullAddress?.get(0)?.locale}")
-                        println("Locality: ${fullAddress?.get(0)?.locality}")
-                        println("Address: ${fullAddress?.get(0)?.getAddressLine(0)}")
-                        println("SubLocality: ${fullAddress?.get(0)?.subLocality}")
-                        println("SubAdminArea: ${fullAddress?.get(0)?.subAdminArea}")
-                        println("Premises: ${fullAddress?.get(0)?.premises}")
-                        println("SubThroughfare: ${fullAddress?.get(0)?.subThoroughfare}")
-                        println("Throughfare: ${fullAddress?.get(0)?.thoroughfare}")
-                        calle = fullAddress?.get(0)?.thoroughfare + fullAddress?.get(0)?.subThoroughfare
-                        colonia = fullAddress?.get(0)?.subLocality
-                    } else {
+                        if(fullAddress != null && fullAddress.isNotEmpty()){
+                            //TODO borrar
+                            println("Locale: ${fullAddress?.get(0)?.locale}")
+                            println("Locality: ${fullAddress?.get(0)?.locality}")
+                            println("Address: ${fullAddress?.get(0)?.getAddressLine(0)}")
+                            println("SubLocality: ${fullAddress?.get(0)?.subLocality}")
+                            println("SubAdminArea: ${fullAddress?.get(0)?.subAdminArea}")
+                            println("Premises: ${fullAddress?.get(0)?.premises}")
+                            println("SubThroughfare: ${fullAddress?.get(0)?.subThoroughfare}")
+                            println("Throughfare: ${fullAddress?.get(0)?.thoroughfare}")
+                            //Guardar la calle y colonia obtenidos y mostrarlos dentro de la app
+                            calle = fullAddress?.get(0)?.thoroughfare + " "+ fullAddress?.get(0)?.subThoroughfare
+                            colonia = fullAddress?.get(0)?.subLocality
+                            etUbicacion?.setText(calle+", "+colonia)
+                            etUbicacion?.isEnabled = false
+                        }
+                        else{
+                            showToast("Problemas al obtener la ubicacion")
+                        }
+
+                    }
+                    else {
                         showToast("No se pudo obtener la ubicación")
                     }
                 }
