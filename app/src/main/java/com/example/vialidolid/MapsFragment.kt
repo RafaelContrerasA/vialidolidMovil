@@ -25,6 +25,7 @@ import androidx.appcompat.app.AlertDialog
 import android.provider.Settings
 import androidx.core.app.ActivityCompat.finishAffinity
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.model.Marker
 
 class MapsFragment : Fragment() {
     val coordenadas = mutableMapOf<String, LatLng>()
@@ -38,8 +39,8 @@ class MapsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val coordenada1 = LatLng(-33.9, 151.0)
-        val coordenada2 = LatLng(-33.8, 151.0)
+        val coordenada1 = LatLng(19.6821, -101.2241)
+        val coordenada2 = LatLng(19.6820, -101.2253)
         coordenadas["Coordenada 1"] = coordenada1
         coordenadas["Coordenada 2"] = coordenada2
 
@@ -66,11 +67,49 @@ class MapsFragment : Fragment() {
         googleMap.addMarker(MarkerOptions().position(sydney2).title("Marker in Sydney"))
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney2))
 
-
-        googleMap.addMarker(MarkerOptions().position(coordenadas["Coordenada 1"] as LatLng).title("Marker in Sydney"))
-        googleMap.addMarker(MarkerOptions().position(coordenadas["Coordenada 2"] as LatLng).title("Marker in Sydney"))*/
+        */
+        googleMap.addMarker(MarkerOptions().position(coordenadas["Coordenada 1"] as LatLng).title("Marcador 1"))
+        googleMap.addMarker(MarkerOptions().position(coordenadas["Coordenada 2"] as LatLng).title("Marcador 2"))
 
         getLocationAccess()
+
+
+
+
+
+        map.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener {
+            override fun onMarkerClick(marker: Marker): Boolean {
+                var title = marker.title
+
+                //Crear Bundle con todos los datos del reporte para mostrarlos
+                var bundle = Bundle()
+                bundle.putString("Calle", "Esta es la calle "+ title)
+                bundle.putString("Descripcion", "Esta es una descripcion")
+                bundle.putString("Likes", "7777")
+
+                //Crear fragmento y adjuntar bundle
+                var reportFragment = reportFragment()
+                reportFragment.arguments = bundle
+
+                //Mostrar fragmento
+                reportFragment.show(parentFragmentManager, "TAG")
+
+                //True remueve el comportamiento por defecto de los marcadores
+                return true
+            }
+        })
+
+
+        /*map.setOnMarkerClickListener(new Google.Map.OnMarkerClickListener(){
+            @override
+            public boolean onMarkerClick(Marker marker){
+                printl("Hola");
+                return false;
+            }
+
+
+        });*/
+
     }
 
     override fun onCreateView(
@@ -150,10 +189,10 @@ class MapsFragment : Fragment() {
 
     private fun getLocationUpdates(){
         //Parameteres for location Request
-        locationRequest= LocationRequest.Builder(3000)
+        locationRequest= LocationRequest.Builder(1000)
             .apply {
                 setPriority(Priority.PRIORITY_HIGH_ACCURACY)
-                setMinUpdateIntervalMillis(2000)
+                setMinUpdateIntervalMillis(1000)
             }.build()
 
         locationCallback = object : LocationCallback(){
@@ -163,7 +202,8 @@ class MapsFragment : Fragment() {
                     if(location != null){
                         val latLng = LatLng(location.latitude,location.longitude)
                         val markerOptions = MarkerOptions().position(latLng)
-                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,16f))
+                        //TODO agregar variable para que solo trackee si presionas boton centrar
+                        //map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,16f))
                     }
                 }
             }
