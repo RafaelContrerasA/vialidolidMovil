@@ -35,11 +35,9 @@
     </string-array>
 
 
-
-
     <!--  Arreglo de categorias  -->
     <string-array name="categoria">
-        <item></item>
+        <item colorText="#757575">Seleccionar</item>
         <item>Alumbrado público</item>
         <item>Bache</item>
         <item>Maltrato animal</item>

@@ -12,9 +12,14 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Vialidolid"
-
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".fragmentoReportes"
+            android:exported="false" />
+        <activity
+            android:name=".misReportes"
+            android:exported="false" />
         <activity
             android:name=".userProfile"
             android:exported="false" />
@@ -51,7 +56,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".reporte_vial"
             android:exported="false" />
