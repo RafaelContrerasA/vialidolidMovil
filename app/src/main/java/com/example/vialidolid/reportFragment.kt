@@ -26,21 +26,21 @@ class reportFragment(): BottomSheetDialogFragment() {
 
         //Colocar el texto de la calle
         tvCalle=view.findViewById(R.id.tvCalle)
-        var calle =arguments?.getString("Calle")
-        tvCalle?.setText(calle)
+        var calle =arguments?.getInt("idReporte")
+        tvCalle?.setText(calle.toString())
         println(calle)
 
         //Colocar el texto de la descripcion
         tvDescripción=view.findViewById(R.id.tvDescripcion)
-        var descripcion = this.arguments?.getString("Descripcion")
-        tvDescripción?.setText(descripcion)
+        var descripcion = this.arguments?.getInt("tipoReporte")
+        tvDescripción?.setText(descripcion.toString())
         println(descripcion)
-
+        /*
         //Colocar cantidad de likes
         tvLikes=view.findViewById(R.id.tvLikes)
         var likes = this.arguments?.getString("Likes")
         tvLikes?.setText(likes)
-        println(likes)
+        println(likes)*/
 
 
         return view

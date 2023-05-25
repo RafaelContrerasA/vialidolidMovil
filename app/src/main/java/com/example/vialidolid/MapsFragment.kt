@@ -24,8 +24,15 @@ import com.google.android.gms.maps.model.MarkerOptions
 import androidx.appcompat.app.AlertDialog
 import android.provider.Settings
 import androidx.core.app.ActivityCompat.finishAffinity
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.Volley
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.Marker
+import org.json.JSONArray
+import org.json.JSONException
 
 class MapsFragment : Fragment() {
     val coordenadas = mutableMapOf<String, LatLng>()
@@ -36,13 +43,11 @@ class MapsFragment : Fragment() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     public lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
+    private lateinit var dataMap: HashMap<String, Marcador>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val coordenada1 = LatLng(19.6821, -101.2241)
-        val coordenada2 = LatLng(19.6820, -101.2253)
-        coordenadas["Coordenada 1"] = coordenada1
-        coordenadas["Coordenada 2"] = coordenada2
+
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
@@ -68,26 +73,27 @@ class MapsFragment : Fragment() {
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney2))
 
         */
-        googleMap.addMarker(MarkerOptions().position(coordenadas["Coordenada 1"] as LatLng).title("Marcador 1"))
-        googleMap.addMarker(MarkerOptions().position(coordenadas["Coordenada 2"] as LatLng).title("Marcador 2"))
 
         getLocationAccess()
 
+        //Obtener las coordenadas para los marcadores de los reportes y añadirlos
+        obtenerMarcadores()
 
 
 
 
+
+        //Cambiar el comportamiento por defecto de los marcadores de google maps
         map.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener {
             override fun onMarkerClick(marker: Marker): Boolean {
                 var title = marker.title
-
-                //Crear Bundle con todos los datos del reporte para mostrarlos
+                var tipo = dataMap[title]?.tipoReporte
+                //Crear Bundle con el id y el tipo para posteriormente obtener los datos dentro del fragmento
                 var bundle = Bundle()
-                bundle.putString("Calle", "Esta es la calle "+ title)
-                bundle.putString("Descripcion", "Esta es una descripcion")
-                bundle.putString("Likes", "7777")
+                bundle.putInt("idReporte", title?.toIntOrNull() ?: 0)
+                bundle.putInt("tipoReporte",tipo?: 0)
 
-                //Crear fragmento y adjuntar bundle
+                //Crear fragmento y adjuntar bundleS
                 var reportFragment = reportFragment()
                 reportFragment.arguments = bundle
 
@@ -124,7 +130,6 @@ class MapsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
-        ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST)
 
     }
 
@@ -139,8 +144,7 @@ class MapsFragment : Fragment() {
             getLocationUpdates()
             startLocationUpdates()
         } else {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
+            requestPermissions(
                 arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
                 LOCATION_PERMISSION_REQUEST
             )
@@ -175,6 +179,7 @@ class MapsFragment : Fragment() {
     IntArray) {
         if(requestCode == LOCATION_PERMISSION_REQUEST){
             if(grantResults.contains(PackageManager.PERMISSION_GRANTED)){
+                checkLocationEnabled()
                 getLocationAccess()
                 println("Entre aqui")
                 //TODO wachear que no haga bucle
@@ -214,5 +219,64 @@ class MapsFragment : Fragment() {
         fusedLocationClient.requestLocationUpdates(locationRequest,locationCallback,null)
     }
 
+    fun obtenerMarcadores() {
+        val url = "http://${resources.getString(R.string.server_ip)}/rest/obtenerMarcadores.php" // URL de la API que proporciona los datos
+
+        val request = JsonArrayRequest(Request.Method.GET, url, null,
+            Response.Listener<JSONArray> { response ->
+                dataMap = HashMap<String, Marcador>()
+
+                try {
+                    // Recorre el arreglo de respuesta JSON y guarda los datos en el mapa
+                    for (i in 0 until response.length()) {
+                        val jsonObject = response.getJSONObject(i)
+                        val idReporte = jsonObject.getString("id_reporte")
+                        val latitud = if (jsonObject.isNull("latitud")) 0.0 else jsonObject.getDouble("latitud")
+                        val longitud = if (jsonObject.isNull("longitud")) 0.0 else jsonObject.getDouble("longitud")
+                        val tipoReporte = jsonObject.optInt("tipo_reporte", 0)
+
+                        val reporte = Marcador(idReporte, latitud, longitud, tipoReporte)
+                        dataMap[idReporte] = reporte
+                    }
+
+                    // El mapa "dataMap" ahora contiene los datos obtenidos de la API
+                    // Puedes utilizar el mapa según tus necesidades
+
+                    // Ejemplo de uso: Recorrer el mapa con un ciclo
+                    for ((idReporte, reporte) in dataMap) {
+                        println("ID del Reporte: $idReporte")
+                        println("Latitud: ${reporte.latitud}")
+                        println("Longitud: ${reporte.longitud}")
+                        println("Tipo de Reporte: ${reporte.tipoReporte}")
+                        println()
+                    }
+                    crearMarcadores()
+
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+            },
+            Response.ErrorListener { error ->
+                // Manejo de errores en la solicitud
+                error.printStackTrace()
+            })
+
+        // Agrega la solicitud a la cola de solicitudes de Volley
+        Volley.newRequestQueue(context).add(request)
+    }
+
+    fun crearMarcadores(){
+        for ((idReporte, reporte) in dataMap) {
+
+            map.addMarker(MarkerOptions().position(LatLng(reporte.latitud,reporte.longitud)).title(reporte.idReporte).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)))
+
+            // println("ID del Reporte: $idReporte")
+           // println("Latitud: ${reporte.latitud}")
+           // println("Longitud: ${reporte.longitud}")
+           // println("Tipo de Reporte: ${reporte.tipoReporte}")
+           // println()
+        }
+
+    }
 
 }
