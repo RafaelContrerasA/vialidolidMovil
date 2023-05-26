@@ -157,8 +157,8 @@ class reporte_maltrato_animal : AppCompatActivity() {
                             println("SubThroughfare: ${fullAddress?.get(0)?.subThoroughfare}")
                             println("Throughfare: ${fullAddress?.get(0)?.thoroughfare}")
                             //Guardar la calle y colonia obtenidos y mostrarlos dentro de la app
-                            calle = fullAddress?.get(0)?.thoroughfare + " "+ fullAddress?.get(0)?.subThoroughfare
-                            colonia = fullAddress?.get(0)?.subLocality
+                            calle = (fullAddress?.get(0)?.thoroughfare ?: "") + " "+ (fullAddress?.get(0)?.subThoroughfare ?: "")
+                            colonia = fullAddress?.get(0)?.subLocality ?: ""
                             etUbicacion?.setText(calle+", "+colonia)
                             etUbicacion?.isEnabled = false
                         }
