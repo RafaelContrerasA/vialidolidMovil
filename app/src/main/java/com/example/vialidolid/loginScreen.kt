@@ -111,7 +111,7 @@ class loginScreen : AppCompatActivity() {
 
                     obtenerIdCiudadano(telefono)
                     //Enviar al usuario a al menu principal
-                    val i = Intent(this@loginScreen, userProfile::class.java)
+                    val i = Intent(this@loginScreen, MainActivity::class.java)
                     startActivity(i)
                     finish()
 
@@ -147,7 +147,7 @@ class loginScreen : AppCompatActivity() {
             Response.Listener<String>{ response ->
                 println(response.toString())
                 if(response.toString() != "Error"){
-                    Toast.makeText(this,"Id obtenido exitosamente",Toast.LENGTH_LONG).show()
+                   // Toast.makeText(this,"Id obtenido exitosamente",Toast.LENGTH_LONG).show()
                     //Guardar la sesion del usuario en shared preferences
                     val editor: SharedPreferences.Editor = sharedPreferences.edit()
                     editor.putString(UID_KEY, response)
@@ -155,7 +155,7 @@ class loginScreen : AppCompatActivity() {
                     // changes to our shared prefs.
                     editor.apply()
 
-                    Toast.makeText(this,sharedPreferences.getString("uid", null)!!,Toast.LENGTH_LONG).show()
+                   // Toast.makeText(this,sharedPreferences.getString("uid", null)!!,Toast.LENGTH_LONG).show()
 
 
                     //Enviar al usuario a al menu principal
@@ -186,7 +186,7 @@ class loginScreen : AppCompatActivity() {
         if (!phone.equals("") && !pwd.equals("")) {
             // if email and pwd is not empty we
             // are opening our main 2 activity on below line.
-            val i = Intent(this@loginScreen, userProfile::class.java)
+            val i = Intent(this@loginScreen, MainActivity::class.java)
 
             // on below line we are calling start
             // activity method to start our activity.

@@ -36,6 +36,8 @@ import org.json.JSONException
 
 class MapsFragment : Fragment() {
     val coordenadas = mutableMapOf<String, LatLng>()
+    var trackUser = true
+    var zoom = 15f
 
     private lateinit var map : GoogleMap
     private var LOCATION_PERMISSION_REQUEST = 1
@@ -63,7 +65,16 @@ class MapsFragment : Fragment() {
          * install it inside the SupportMapFragment. This method will only be triggered once the
          * user has installed Google Play services and returned to the app.
          */
+
         map = googleMap
+        var inicial = CameraUpdateFactory.newLatLngZoom( LatLng(19.702896, -101.190384), zoom)
+        map.moveCamera(inicial)
+        map.animateCamera(inicial)
+
+        googleMap.setOnMapLoadedCallback {
+            // El mapa se ha cargado completamente, ahora puedes rastrear la ubicación del usuario
+            // y realizar otras operaciones necesarias
+        }
         /*val sydney = LatLng(-34.0, 151.0)
         googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
@@ -105,18 +116,33 @@ class MapsFragment : Fragment() {
             }
         })
 
-
-        /*map.setOnMarkerClickListener(new Google.Map.OnMarkerClickListener(){
-            @override
-            public boolean onMarkerClick(Marker marker){
-                printl("Hola");
-                return false;
+        //En caso de que el usario se ponga a recorrer el mapa dejar de centrar su ubicacion
+        map.setOnCameraMoveStartedListener { reasonCode ->
+            if (reasonCode == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
+                // I will no longer keep updating the camera location because
+                // the user interacted with it. This is my field I check before
+                // snapping the camera location to the latest value.
+                trackUser = false
             }
+        }
+
+        //
+        map.setOnMyLocationButtonClickListener {
+            // Aquí puedes definir la acción que deseas realizar al presionar el botón de ubicación
+
+            trackUser = true
+            zoom = map.cameraPosition.zoom
+
+            //false mantiene el comportamiento por defecto de los marcadores
+            false
+        }
 
 
-        });*/
+
 
     }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -208,7 +234,8 @@ class MapsFragment : Fragment() {
                         val latLng = LatLng(location.latitude,location.longitude)
                         val markerOptions = MarkerOptions().position(latLng)
                         //TODO agregar variable para que solo trackee si presionas boton centrar
-                        //map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,16f))
+                        if(trackUser)
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom))
                     }
                 }
             }
