@@ -1,6 +1,8 @@
 package com.example.vialidolid
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
@@ -24,6 +26,9 @@ class reporte_alumbrado_publico : AppCompatActivity() {
     var etDescripcionAP: EditText? = null
     var etReferenciasAP: EditText? = null
 
+    //iniciar y obtener usuario del sharedPreference
+    lateinit var sharedPreferences: SharedPreferences
+
     //Obtener las coordenadas actuales y colocarlas dentro del editText
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var geocoder: Geocoder
@@ -32,13 +37,16 @@ class reporte_alumbrado_publico : AppCompatActivity() {
 
     //Ubicacion por defecto en caso de no poder obtener la ubicacion del usuario.
     private var etUbicacion: EditText? = null
-    private var lat: Double = 19.7040
-    private var lng: Double = -101.1908
+    private var latitude: Double = 19.7040
+    private var longitude: Double = -101.1908
     private var calle : String? = "Guillermo Prieto 314,"
     private var colonia : String? = "Centro histórico de Morelia"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reporte_alumbrado_publico)
+
+        //iniciar y obtener usuario del sharedPreference
+        sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE)
 
         etUbicacion = findViewById(R.id.etUbicacionAP)
         etDescripcionAP = findViewById(R.id.etDescripcionAP)
@@ -124,6 +132,11 @@ class reporte_alumbrado_publico : AppCompatActivity() {
                 val parametros1=HashMap<String,String>()
                 parametros1.put("descripcion",etDescripcionAP?.text.toString())
                 parametros1.put("referencias",etReferenciasAP?.text.toString())
+                parametros1.put("calle", calle ?: "")
+                parametros1.put("colonia", colonia ?: "")
+                parametros1.put("latitud", (latitude).toString())
+                parametros1.put("longitud", (longitude).toString())
+                parametros1.put("id_ciudadano", sharedPreferences.getString("uid", null)!!)
                 return parametros1
             }
         }
@@ -143,8 +156,8 @@ class reporte_alumbrado_publico : AppCompatActivity() {
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location: Location? ->
                     if (location != null) {
-                        val latitude = location.latitude
-                        val longitude = location.longitude
+                        latitude = location.latitude
+                        longitude = location.longitude
                         val locationText = "Lat: $latitude, Long: $longitude"
                         var fullAddress = geocoder.getFromLocation(latitude, longitude, 1)
                         showToast(locationText)

@@ -35,6 +35,7 @@ class userProfile : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE)
         println(sharedPreferences.getString("phone", null)!!)
         println(sharedPreferences.getString("pwd", null)!!)
+        println(sharedPreferences.getString("uid", null)!!)
 
         //campos del formulario para obtener sus datos
         etNombre = findViewById(R.id.etNombre)

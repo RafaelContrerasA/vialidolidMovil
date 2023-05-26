@@ -1,6 +1,8 @@
 package com.example.vialidolid
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
@@ -23,6 +25,9 @@ class reporte_vial : AppCompatActivity() {
     var etDescripcion: EditText? = null
     var etReferencias: EditText? = null
 
+    //iniciar y obtener usuario del sharedPreference
+    lateinit var sharedPreferences: SharedPreferences
+
     //Obtener las coordenadas actuales y colocarlas dentro del editText
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var geocoder: Geocoder
@@ -31,8 +36,8 @@ class reporte_vial : AppCompatActivity() {
 
     //Ubicacion por defecto en caso de no poder obtener la ubicacion del usuario.
     private var etUbicacion: EditText? = null
-    private var lat: Double = 19.7040
-    private var lng: Double = -101.1908
+    private var latitude: Double = 19.7040
+    private var longitude: Double = -101.1908
     private var calle : String? = "Guillermo Prieto 314,"
     private var colonia : String? = "Centro histórico de Morelia"
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +46,9 @@ class reporte_vial : AppCompatActivity() {
         etDescripcion = findViewById(R.id.etDescripcionAP)
         etReferencias = findViewById(R.id.etReferenciasAP)
         etUbicacion = findViewById(R.id.etUbicacionAP)
+
+        //iniciar y obtener usuario del sharedPreference
+        sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE)
 
         val arrayCategoria = resources.getStringArray(R.array.categoria)
         val spinnerCategoria = findViewById<Spinner>(R.id.spVial)
@@ -105,7 +113,11 @@ class reporte_vial : AppCompatActivity() {
                 val parametros=HashMap<String,String>()
                 parametros.put("descripcion",etDescripcion?.text.toString())
                 parametros.put("referencias",etReferencias?.text.toString())
-
+                parametros.put("calle", calle ?: "")
+                parametros.put("colonia", colonia ?: "")
+                parametros.put("latitud", (latitude).toString())
+                parametros.put("longitud", (longitude).toString())
+                parametros.put("id_ciudadano", sharedPreferences.getString("uid", null)!!)
                 return parametros
             }
         }

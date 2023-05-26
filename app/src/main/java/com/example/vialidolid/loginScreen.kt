@@ -32,11 +32,13 @@ class loginScreen : AppCompatActivity() {
     var PREFS_KEY = "usuario"
     var PHONE_KEY = "phone"
     var PWD_KEY = "pwd"
+    var UID_KEY = "uid"
 
     // on below line we are creating a
     // variable for email and password.
     var phone = ""
     var pwd = ""
+    var uid = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_screen)
@@ -51,6 +53,8 @@ class loginScreen : AppCompatActivity() {
         // on below line we are getting data from
         // shared prefs and setting it to pwd.
         pwd = sharedPreferences.getString(PWD_KEY, "").toString()
+
+        uid = sharedPreferences.getString(UID_KEY, "").toString()
 
         //campos de texto de telefono y contraseña
         etTelefono = findViewById(R.id.etTelefono)
@@ -104,6 +108,8 @@ class loginScreen : AppCompatActivity() {
                     // on below line we are applying
                     // changes to our shared prefs.
                     editor.apply()
+
+                    obtenerIdCiudadano(telefono)
                     //Enviar al usuario a al menu principal
                     val i = Intent(this@loginScreen, userProfile::class.java)
                     startActivity(i)
@@ -129,6 +135,51 @@ class loginScreen : AppCompatActivity() {
         queue.add(resultadoPost)
 
     }
+
+    fun obtenerIdCiudadano(telefono: String) {
+        var respuesta = "Pendiente"
+        val queue = Volley.newRequestQueue(this)
+        val url = "http://${resources.getString(R.string.server_ip)}/rest/obtenerIdCiudadano.php"
+        println(url)
+
+
+        var resultadoPost = object : StringRequest(Request.Method.POST, url,
+            Response.Listener<String>{ response ->
+                println(response.toString())
+                if(response.toString() != "Error"){
+                    Toast.makeText(this,"Id obtenido exitosamente",Toast.LENGTH_LONG).show()
+                    //Guardar la sesion del usuario en shared preferences
+                    val editor: SharedPreferences.Editor = sharedPreferences.edit()
+                    editor.putString(UID_KEY, response)
+                    // on below line we are applying
+                    // changes to our shared prefs.
+                    editor.apply()
+
+                    Toast.makeText(this,sharedPreferences.getString("uid", null)!!,Toast.LENGTH_LONG).show()
+
+
+                    //Enviar al usuario a al menu principal
+
+
+                }
+                else{
+                    Toast.makeText(this,"Error para obtener ID",Toast.LENGTH_LONG).show()
+
+                }
+
+            }, Response.ErrorListener{ error ->
+                Toast.makeText(this,"Error de conexión, reintentelo mas tarde",Toast.LENGTH_LONG).show()
+
+            }){
+            override fun getParams(): MutableMap<String, String>? {
+                val parametros = HashMap<String,String>()
+                parametros["telefono"] = telefono
+                return parametros
+            }
+        }
+        queue.add(resultadoPost)
+    }
+
     override fun onStart() {
         super.onStart()
         // in this method we are checking if email and pwd are not empty.
@@ -146,15 +197,5 @@ class loginScreen : AppCompatActivity() {
             finish()
         }
     }
-/*Funcion para jdbc, no se utilizo
-fun buscar(){
-    GlobalScope.launch{
-        var connection = ConnectionHelper()
-        connection.connect()
 
-}
-
-
-    }
-*/
 }
