@@ -1,19 +1,24 @@
 package com.example.vialidolid
 
+import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -23,12 +28,18 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import java.io.ByteArrayOutputStream
 import java.util.*
 import kotlin.collections.HashMap
+import android.graphics.BitmapFactory
+import android.net.ConnectivityManager
+import android.util.Base64
+
 
 class reporte_bache : AppCompatActivity() {
     var etDescripcion: EditText? = null
     var etReferencias: EditText? = null
+    var imageBitmap: Bitmap? = null
 
     //iniciar y obtener usuario del sharedPreference
     lateinit var sharedPreferences: SharedPreferences
@@ -117,32 +128,42 @@ class reporte_bache : AppCompatActivity() {
     }
 
     //---------------- Función para mandar los datos a la base de datos
-    fun insertar(view: View){
-        val url="http://${resources.getString(R.string.server_ip)}/rest/insertarReportebache.php"
-        val queue= Volley.newRequestQueue(this)
-        var resultadoPost = object : StringRequest(Request.Method.POST,url,
-            Response.Listener<String> { response ->
-                Toast.makeText(this@reporte_bache,"Reporte generado", Toast.LENGTH_LONG).show()
-            } , Response.ErrorListener { error ->
-                Toast.makeText(this@reporte_bache,"Error $error", Toast.LENGTH_LONG).show()
-            }){
-            override fun getParams(): MutableMap<String, String>? {
-                val parametros=HashMap<String,String>()
-                parametros.put("descripcion",etDescripcion?.text.toString())
-                parametros.put("referencias",etReferencias?.text.toString())
-                parametros.put("calle", calle ?: "")
-                parametros.put("colonia", colonia ?: "")
-                parametros.put("latitud", (latitude).toString())
-                parametros.put("longitud", (longitude).toString())
-                parametros.put("id_ciudadano", sharedPreferences.getString("uid", null)!!)
-                return parametros
+    fun insertar(view: View) {
+        if (validarCamposVacios()) {
+            val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val networkInfo = connectivityManager.activeNetworkInfo
+
+            if (networkInfo != null && networkInfo.isConnected) {
+                val url = "http://${resources.getString(R.string.server_ip)}/rest/insertarReportebache.php"
+                val queue = Volley.newRequestQueue(this)
+
+                val resultadoPost = object : StringRequest(Request.Method.POST, url,
+                    Response.Listener<String> { response ->
+                        Toast.makeText(this@reporte_bache, "Reporte generado", Toast.LENGTH_LONG).show()
+                        val intent = Intent(this@reporte_bache, reporte_comp::class.java)
+                        startActivity(intent)
+                    }, Response.ErrorListener { error ->
+                        Toast.makeText(this@reporte_bache, "Error $error", Toast.LENGTH_LONG).show()
+                    }) {
+                    override fun getParams(): MutableMap<String, String>? {
+                        val parametros = HashMap<String, String>()
+                        parametros["descripcion"] = etDescripcion?.text.toString()
+                        parametros["referencias"] = etReferencias?.text.toString()
+                        parametros["calle"] = calle ?: ""
+                        parametros["colonia"] = colonia ?: ""
+                        parametros["latitud"] = latitude.toString()
+                        parametros["longitud"] = longitude.toString()
+                        //parametros["imagen"] = convertirBitmapAString(imageBitmap)
+                        parametros["id_ciudadano"] = sharedPreferences.getString("uid", null)!!
+                        return parametros
+                    }
+                }
+
+                queue.add(resultadoPost)
+            } else {
+                Toast.makeText(this@reporte_bache, "No hay conexión a Internet", Toast.LENGTH_LONG).show()
             }
         }
-        queue.add(resultadoPost)
-        val intent = Intent(this@reporte_bache,reporte_comp::class.java)
-        startActivity(intent)
-
-
     }
 
 
@@ -219,5 +240,21 @@ class reporte_bache : AppCompatActivity() {
         }
     }
 
+    private fun validarCamposVacios(): Boolean {
+        val descripcion = etDescripcion?.text?.toString()?.trim()
+        val referencias = etReferencias?.text?.toString()?.trim()
+
+        if (descripcion.isNullOrEmpty()) {
+            etDescripcion?.error = "Ingresa una descripción"
+            return false
+        }
+
+        if (referencias.isNullOrEmpty()) {
+            etReferencias?.error = "Ingresa algunas referencias"
+            return false
+        }
+
+        return true
+    }
 
 }

@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -104,32 +105,42 @@ class reporte_maltrato_animal : AppCompatActivity() {
         getLocation()
     }
     //---------------- Función para mandar los datos a la base de datos
-    fun insertar(view: View){
-        val url="http://${resources.getString(R.string.server_ip)}/rest/insertarReporteMaltratoAnimal.php"
-        val queue= Volley.newRequestQueue(this)
-        var resultadoPost = object : StringRequest(Request.Method.POST,url,
-            Response.Listener<String> { response ->
-                Toast.makeText(this@reporte_maltrato_animal,"Reporte generado", Toast.LENGTH_LONG).show()
-            } , Response.ErrorListener { error ->
-                Toast.makeText(this@reporte_maltrato_animal,"Error $error", Toast.LENGTH_LONG).show()
-            }){
-            override fun getParams(): MutableMap<String, String>? {
-                val parametros=HashMap<String,String>()
-                parametros.put("descripcion",etDescripcionMA?.text.toString())
-                parametros.put("referencias",etReferenciasMA?.text.toString())
-                parametros.put("calle", calle ?: "")
-                parametros.put("colonia", colonia ?: "")
-                parametros.put("latitud", (latitude).toString())
-                parametros.put("longitud", (longitude).toString())
-                parametros.put("id_ciudadano", sharedPreferences.getString("uid", null)!!)
-                parametros.put("tipo_mascota",etTipoAnimal?.text.toString())
-                return parametros
+    fun insertar(view: View) {
+        if (validarCamposVacios()) {
+            val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val networkInfo = connectivityManager.activeNetworkInfo
+
+            if (networkInfo != null && networkInfo.isConnected) {
+                val url = "http://${resources.getString(R.string.server_ip)}/rest/insertarReporteMaltratoAnimal.php"
+                val queue = Volley.newRequestQueue(this)
+
+                val resultadoPost = object : StringRequest(Request.Method.POST, url,
+                    Response.Listener<String> { response ->
+                        Toast.makeText(this@reporte_maltrato_animal, "Reporte generado", Toast.LENGTH_LONG).show()
+                        val intent = Intent(this@reporte_maltrato_animal, reporte_comp::class.java)
+                        startActivity(intent)
+                    }, Response.ErrorListener { error ->
+                        Toast.makeText(this@reporte_maltrato_animal, "Error $error", Toast.LENGTH_LONG).show()
+                    }) {
+                    override fun getParams(): MutableMap<String, String>? {
+                        val parametros = HashMap<String, String>()
+                        parametros["descripcion"] = etDescripcionMA?.text.toString()
+                        parametros["referencias"] = etReferenciasMA?.text.toString()
+                        parametros["calle"] = calle ?: ""
+                        parametros["colonia"] = colonia ?: ""
+                        parametros["latitud"] = latitude.toString()
+                        parametros["longitud"] = longitude.toString()
+                        parametros["id_ciudadano"] = sharedPreferences.getString("uid", null)!!
+                        parametros["tipo_mascota"] = etTipoAnimal?.text.toString()
+                        return parametros
+                    }
+                }
+
+                queue.add(resultadoPost)
+            } else {
+                Toast.makeText(this@reporte_maltrato_animal, "No hay conexión a Internet", Toast.LENGTH_LONG).show()
             }
         }
-        queue.add(resultadoPost)
-        val intent = Intent(this@reporte_maltrato_animal,reporte_comp::class.java)
-        startActivity(intent)
-
     }
 
     private fun getLocation() {
@@ -203,5 +214,27 @@ class reporte_maltrato_animal : AppCompatActivity() {
                 showToast("Location permission denied")
             }
         }
+    }
+    private fun validarCamposVacios(): Boolean {
+        val descripcion = etDescripcionMA?.text?.toString()?.trim()
+        val referencias = etReferenciasMA?.text?.toString()?.trim()
+        val TipoAnimal = etTipoAnimal?.text.toString()?.trim()
+
+        if (descripcion.isNullOrEmpty()) {
+            etDescripcionMA?.error = "Ingresa una descripción"
+            return false
+        }
+
+        if (referencias.isNullOrEmpty()) {
+            etReferenciasMA?.error = "Ingresa algunas referencias"
+            return false
+        }
+
+        if (TipoAnimal.isNullOrEmpty()){
+            etTipoAnimal?.error="Ingresa el tipo de animal"
+            return false
+        }
+
+        return true
     }
 }
