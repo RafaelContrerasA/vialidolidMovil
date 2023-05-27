@@ -1,15 +1,20 @@
 package com.example.vialidolid
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
@@ -21,7 +26,13 @@ class reportFragment(): BottomSheetDialogFragment() {
     private var tvCalle : TextView? = null
     private var tvDescripción : TextView? = null
     private var tvLikes : TextView? = null
+    private var nApoyos=0
 
+    private var liked = false
+    private lateinit var likeButton: ImageButton
+
+    //iniciar y obtener usuario del sharedPreference
+    lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,11 +47,36 @@ class reportFragment(): BottomSheetDialogFragment() {
         tvDescripción=view.findViewById(R.id.tvDescripcion)
         tvLikes=view.findViewById(R.id.tvLikes)
 
+        //iniciar y obtener usuario del sharedPreference
+        sharedPreferences = requireContext().getSharedPreferences("usuario", Context.MODE_PRIVATE)
+
         //Obtener
         var idReporte =arguments?.getInt("idReporte")
         var tipoReporte = this.arguments?.getInt("tipoReporte")
+        var idCiudadano = sharedPreferences.getString("uid", null)!!
 
         obtenerDatosReporte(idReporte?:0,tipoReporte?:0)
+
+
+
+
+
+        likeButton = view.findViewById(R.id.likeButton)
+        likeButton.setOnClickListener {
+            if (liked == false) {
+                println("Apenas daras like")
+                guardarApoyo(idReporte?:0,idCiudadano)
+
+            } else {
+                println("Ya diste like")
+                eliminarApoyo(idReporte?:0,idCiudadano)
+
+            }
+        }
+
+        //BUscar si el usuario ya ha dado like al post anteriormente
+        verificarApoyoPrevio(idReporte?:0,idCiudadano)
+
 
         return view
     }
@@ -63,7 +99,7 @@ class reportFragment(): BottomSheetDialogFragment() {
                         val descripcion = jsonObject.optString("descripcion")
                         val latitud = jsonObject.optDouble("latitud")
                         val longitud = jsonObject.optDouble("longitud")
-                        val nApoyos = jsonObject.optInt("n_apoyos")
+                        nApoyos = jsonObject.optInt("n_apoyos")
                         val estatus = jsonObject.optString("estatus")
                         val nDenuncias = jsonObject.optInt("n_denuncias")
                         val referencias = jsonObject.optString("referencias")
@@ -108,5 +144,82 @@ class reportFragment(): BottomSheetDialogFragment() {
         // Agregar la solicitud a la cola de Volley
         Volley.newRequestQueue(requireContext()).add(request)
     }
+
+    fun verificarApoyoPrevio(idReporte: Int, idCiudadano: String) {
+        // URL del script PHP
+        val url = "http://${resources.getString(R.string.server_ip)}/rest/verificarApoyoPrevio.php?id_reporte=$idReporte&id_ciudadano=$idCiudadano"
+
+        // Realizar la solicitud HTTP utilizando Volley
+        val request = StringRequest(Request.Method.GET, url,
+            Response.Listener { response ->
+                // Mostrar la respuesta en un Toast
+                if(response == "Hay apoyo"){
+                    liked = true
+                    likeButton.setBackgroundColor(getResources().getColor(R.color.light_blue))
+                }
+            },
+            Response.ErrorListener { error ->
+                // Manejar el error en caso de que ocurra
+                Toast.makeText(requireContext(), "Error: " + error.message, Toast.LENGTH_SHORT).show()
+            })
+
+        // Agregar la solicitud a la cola de solicitudes de Volley
+        Volley.newRequestQueue(context).add(request)
+    }
+
+
+    fun guardarApoyo(idReporte: Int, idCiudadano: String) {
+        // URL del script PHP
+        val url = "http://${resources.getString(R.string.server_ip)}/rest/nuevoApoyo.php?id_reporte=$idReporte&id_ciudadano=$idCiudadano"
+
+        // Realizar la solicitud HTTP utilizando Volley
+        val request = StringRequest(Request.Method.GET, url,
+            Response.Listener { response ->
+                println(response)
+                // Mostrar la respuesta en un Toast
+                if(response == "Apoyo Exitoso"){
+                    liked = true
+                    likeButton.setBackgroundColor(getResources().getColor(R.color.light_blue))
+                    nApoyos+=1
+                    tvLikes?.setText(nApoyos.toString())
+                }
+            },
+            Response.ErrorListener { error ->
+                // Manejar el error en caso de que ocurra
+                Toast.makeText(requireContext(), "Error, intentelo mas tarde", Toast.LENGTH_SHORT).show()
+            })
+
+        // Agregar la solicitud a la cola de solicitudes de Volley
+        Volley.newRequestQueue(context).add(request)
+    }
+
+    fun eliminarApoyo(idReporte: Int, idCiudadano: String) {
+        // URL del script PHP
+        val url = "http://${resources.getString(R.string.server_ip)}/rest/eliminarApoyo.php?id_reporte=$idReporte&id_ciudadano=$idCiudadano"
+
+        // Realizar la solicitud HTTP utilizando Volley
+        val request = StringRequest(Request.Method.GET, url,
+            Response.Listener { response ->
+                println(response)
+                // Mostrar la respuesta en un Toast
+                if(response == "Apoyo Eliminado"){
+                    liked = false
+                    likeButton.setBackgroundColor(getResources().getColor(R.color.dark_gray))
+                    nApoyos-=1
+                    tvLikes?.setText(nApoyos.toString())
+                }
+            },
+            Response.ErrorListener { error ->
+                // Manejar el error en caso de que ocurra
+                Toast.makeText(requireContext(), "Error, intentelo mas tarde", Toast.LENGTH_SHORT).show()
+            })
+
+        // Agregar la solicitud a la cola de solicitudes de Volley
+        Volley.newRequestQueue(context).add(request)
+    }
+
+
+
+
 
 }
