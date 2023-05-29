@@ -29,6 +29,7 @@
         android:id="@+id/ivImagenUsuario"
         android:layout_width="135dp"
         android:layout_height="91dp"
+        android:tint="#FFFFFF"
         app:layout_constraintStart_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toTopOf="@+id/guideline4"
         app:srcCompat="@drawable/account_circle" />
