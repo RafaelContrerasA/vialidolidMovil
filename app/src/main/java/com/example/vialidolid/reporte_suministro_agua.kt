@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
-import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -108,55 +107,34 @@ class reporte_suministro_agua : AppCompatActivity() {
 
 
     //---------------- Función para mandar los datos a la base de datos
-    fun insertar(view: View) {
-        if (validarCamposVacios()) {
-            val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val networkInfo = connectivityManager.activeNetworkInfo
+    fun insertar(view: View){
+        val url="http://${resources.getString(R.string.server_ip)}/rest/insertarReporteOoapas.php"
+        val queue= Volley.newRequestQueue(this)
+        var resultadoPost = object : StringRequest(Request.Method.POST,url,
+            Response.Listener<String> { response ->
+                Toast.makeText(this@reporte_suministro_agua,"Reporte generado", Toast.LENGTH_LONG).show()
+            } , Response.ErrorListener { error ->
+                Toast.makeText(this@reporte_suministro_agua,"Error $error", Toast.LENGTH_LONG).show()
+            }){
+            override fun getParams(): MutableMap<String, String>? {
+                val parametros=HashMap<String,String>()
+                parametros.put("descripcion",etDescripcion?.text.toString())
+                parametros.put("referencias",etReferencias?.text.toString())
+                parametros.put("calle", calle ?: "")
+                parametros.put("colonia", colonia ?: "")
+                parametros.put("latitud", (latitude).toString())
+                parametros.put("longitud", (longitude).toString())
+                parametros.put("id_ciudadano", sharedPreferences.getString("uid", null)!!)
+                parametros.put("cve_predio",etClavPredio?.text.toString())
 
-            if (networkInfo != null && networkInfo.isConnected) {
-                val url = "http://${resources.getString(R.string.server_ip)}/rest/insertarReporteOoapas.php"
-                val queue = Volley.newRequestQueue(this)
-
-                val resultadoPost = object : StringRequest(Request.Method.POST, url,
-                    Response.Listener<String> { response ->
-                        Toast.makeText(this@reporte_suministro_agua, "Reporte generado", Toast.LENGTH_LONG).show()
-                        val intent = Intent(this@reporte_suministro_agua, reporte_comp::class.java)
-                        startActivity(intent)
-                    }, Response.ErrorListener { error ->
-                        Toast.makeText(this@reporte_suministro_agua, "Error $error", Toast.LENGTH_LONG).show()
-                    }) {
-                    override fun getParams(): MutableMap<String, String>? {
-                        val parametros = HashMap<String, String>()
-                        parametros["descripcion"] = etDescripcion?.text.toString()
-                        parametros["referencias"] = etReferencias?.text.toString()
-                        parametros["calle"] = calle ?: ""
-                        parametros["colonia"] = colonia ?: ""
-                        parametros["latitud"] = latitude.toString()
-                        parametros["longitud"] = longitude.toString()
-                        parametros["id_ciudadano"] = sharedPreferences.getString("uid", null)!!
-                        parametros["cve_predio"] = etClavPredio?.text.toString()
-                        return parametros
-                    }
-                }
-
-                queue.add(resultadoPost)
-            } else {
-                Toast.makeText(this@reporte_suministro_agua, "No hay conexión a Internet", Toast.LENGTH_LONG).show()
+                return parametros
             }
         }
-    }
+        queue.add(resultadoPost)
+        val intent = Intent(this@reporte_suministro_agua,reporte_comp::class.java)
+        startActivity(intent)
 
-    private fun validarCamposVacios(): Boolean {
-        val descripcion = etDescripcion?.text.toString().trim()
-        val referencias = etReferencias?.text.toString().trim()
-        val cvePredio = etClavPredio?.text.toString().trim()
 
-        return if (descripcion.isEmpty() || referencias.isEmpty() || cvePredio.isEmpty()) {
-            Toast.makeText(this@reporte_suministro_agua, "Por favor, completa todos los campos", Toast.LENGTH_LONG).show()
-            false
-        } else {
-            true
-        }
     }
 
     private fun getLocation() {

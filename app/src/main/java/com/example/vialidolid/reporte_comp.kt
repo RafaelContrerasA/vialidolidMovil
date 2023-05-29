@@ -20,9 +20,7 @@ class reporte_comp : AppCompatActivity() {
 
         val btMReportes = findViewById<Button>(R.id.btMReportes)
         btMReportes.setOnClickListener(View.OnClickListener {
-            val intent = Intent(this@reporte_comp,MisReportes::class.java)
-            startActivity(intent)
-            finish()
+            Toast.makeText(this@reporte_comp,"En construcción", Toast.LENGTH_LONG).show()
         })
 
     }

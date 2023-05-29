@@ -38,10 +38,8 @@
         android:id="@+id/imageView"
         android:layout_width="135dp"
         android:layout_height="91dp"
-        android:tint="#FFFFFF"
-        app:layout_constraintStart_toStartOf="@+id/guideline9"
-        app:layout_constraintTop_toTopOf="@+id/guideline7"
-        app:srcCompat="@drawable/account_circle" />
+        app:srcCompat="@drawable/account_circle"
+        app:layout_constraintTop_toTopOf="@+id/guideline7" app:layout_constraintStart_toStartOf="@+id/guideline9"/>
 
     <EditText
         android:id="@+id/etDescripcionAP"

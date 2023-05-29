@@ -37,7 +37,6 @@
         android:id="@+id/imageView"
         android:layout_width="135dp"
         android:layout_height="91dp"
-        android:tint="#FFFFFF"
         app:layout_constraintStart_toStartOf="@+id/guideline9"
         app:layout_constraintTop_toTopOf="@+id/guideline7"
         app:srcCompat="@drawable/account_circle" />
@@ -87,11 +86,24 @@
     <Button
         android:id="@+id/btGReporte"
         style="@style/button"
+        android:layout_marginTop="15dp"
         android:backgroundTint="#1573fe"
         android:onClick="insertar"
         android:text="Generar Reporte"
         app:layout_constraintBottom_toTopOf="@+id/btCancelar"
+        app:layout_constraintEnd_toEndOf="@+id/btImagen"
+        app:layout_constraintStart_toStartOf="@+id/btImagen"
+        app:layout_constraintTop_toBottomOf="@+id/btImagen" />
+
+    <Button
+        android:id="@+id/btImagen"
+        style="@style/button"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="@color/white"
+        android:text="Adjuntar Imagenes"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/etReferenciasAP"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/etReferenciasAP"
         app:layout_constraintTop_toBottomOf="@+id/etReferenciasAP" />
 
