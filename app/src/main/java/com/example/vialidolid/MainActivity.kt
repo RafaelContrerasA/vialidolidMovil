@@ -39,7 +39,11 @@ class MainActivity : AppCompatActivity() {
                     val Intent = Intent(this,userProfile::class.java)
                     startActivity(Intent)
                 }
-                R.id.nav_gallery -> Toast.makeText(applicationContext, "Mis reportes", Toast.LENGTH_SHORT).show()
+                R.id.nav_gallery -> {
+                    val Intent = Intent(this,MisReportes::class.java)
+                    startActivity(Intent)
+                    Toast.makeText(applicationContext, "Mis reportes", Toast.LENGTH_SHORT).show()
+                }
                 R.id.nav_slideshow -> {
                     val Intent = Intent(this,nuevo_reporte::class.java)
                     startActivity(Intent)
