@@ -94,7 +94,7 @@ class MisReportes : AppCompatActivity() {
         val queue = Volley.newRequestQueue(this)
         val idCiudadano = sharedPreferences.getString("uid", null)!!
         val tipoReporte = 1 // Valor fijo para el parámetro tipo_reporte
-        val url = "http://192.168.1.64/001%20-%20Kotlin/consultaRepAP.php?id_ciudadano=$idCiudadano&tipo_reporte=$tipoReporte"
+        val url = "http://${resources.getString(R.string.server_ip)}/rest/consultaRepAP.php?id_ciudadano=$idCiudadano&tipo_reporte=$tipoReporte"
         val stringRequest = StringRequest(
             Request.Method.GET, url,
             { response ->
@@ -137,7 +137,7 @@ class MisReportes : AppCompatActivity() {
         val queue = Volley.newRequestQueue(this)
         val idCiudadano = sharedPreferences.getString("uid", null)!!
         val tipoReporte = 2 // Valor fijo para el parámetro tipo_reporte
-        val url = "http://192.168.1.64/001%20-%20Kotlin/consultaRepBache.php?id_ciudadano=$idCiudadano&tipo_reporte=$tipoReporte"
+        val url = "http://${resources.getString(R.string.server_ip)}/rest/consultaRepBache.php?id_ciudadano=$idCiudadano&tipo_reporte=$tipoReporte"
         val stringRequest = StringRequest(
             Request.Method.GET, url,
             { response ->
@@ -182,7 +182,7 @@ class MisReportes : AppCompatActivity() {
         val queue = Volley.newRequestQueue(this)
         val idCiudadano = sharedPreferences.getString("uid", null)!!
         val tipoReporte = 3 // Valor fijo para el parámetro tipo_reporte
-        val url = "http://192.168.1.64/001%20-%20Kotlin/consultaRepMAnimal.php?id_ciudadano=$idCiudadano&tipo_reporte=$tipoReporte"
+        val url = "http://${resources.getString(R.string.server_ip)}/rest/consultaRepMAnimal.php?id_ciudadano=$idCiudadano&tipo_reporte=$tipoReporte"
         val stringRequest = StringRequest(
             Request.Method.GET, url,
             { response ->
@@ -226,7 +226,7 @@ class MisReportes : AppCompatActivity() {
         val queue = Volley.newRequestQueue(this)
         val idCiudadano = sharedPreferences.getString("uid", null)!!
         val tipoReporte = 4 // Valor fijo para el parámetro tipo_reporte
-        val url = "http://192.168.1.64/001%20-%20Kotlin/consultaRepOoapas.php?id_ciudadano=$idCiudadano&tipo_reporte=$tipoReporte"
+        val url = "http://${resources.getString(R.string.server_ip)}/rest/consultaRepOoapas.php?id_ciudadano=$idCiudadano&tipo_reporte=$tipoReporte"
         val stringRequest = StringRequest(
             Request.Method.GET, url,
             { response ->
@@ -271,7 +271,7 @@ class MisReportes : AppCompatActivity() {
         val queue: RequestQueue = Volley.newRequestQueue(this)
         val idCiudadano: String = sharedPreferences.getString("uid", null)!!
         val tipoReporte = 5 // Valor fijo para el parámetro tipo_reporte
-        val url = "http://192.168.1.64/001%20-%20Kotlin/consultaRepVial.php?id_ciudadano=$idCiudadano&tipo_reporte=$tipoReporte"
+        val url = "http://${resources.getString(R.string.server_ip)}/rest/consultaRepVial.php?id_ciudadano=$idCiudadano&tipo_reporte=$tipoReporte"
         val stringRequest = StringRequest(
             Request.Method.GET, url,
             { response ->
