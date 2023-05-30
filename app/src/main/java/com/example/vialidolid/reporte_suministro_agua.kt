@@ -168,8 +168,8 @@ class reporte_suministro_agua : AppCompatActivity() {
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location: Location? ->
                     if (location != null) {
-                        val latitude = location.latitude
-                        val longitude = location.longitude
+                        latitude = location.latitude
+                        longitude = location.longitude
                         val locationText = "Lat: $latitude, Long: $longitude"
                         var fullAddress = geocoder.getFromLocation(latitude, longitude, 1)
                         showToast(locationText)
