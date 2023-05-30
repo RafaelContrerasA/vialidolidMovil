@@ -7,10 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
@@ -21,6 +18,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.json.JSONArray
 import org.json.JSONException
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 
 class reportFragment(): BottomSheetDialogFragment() {
     private var tvCalle : TextView? = null
@@ -77,7 +77,19 @@ class reportFragment(): BottomSheetDialogFragment() {
         //BUscar si el usuario ya ha dado like al post anteriormente
         verificarApoyoPrevio(idReporte?:0,idCiudadano)
 
+        val imageUrl = "https://ae01.alicdn.com/kf/Ha5718126b72049ee8002429a6e721d2bP/Peluche-de-ballena-asesina-para-ni-os-juguete-de-animales-de-peluche-Vida-del-oc-ano.jpg_.webp" // URL de la imagen que deseas mostrar
 
+        val imageView = view.findViewById<ImageView>(R.id.ivReporte)
+
+        /*val requestOptions = RequestOptions()
+            .diskCacheStrategy(DiskCacheStrategy.NONE) // Opcional: desactiva la caché de Glide
+            .skipMemoryCache(true) // Opcional: salta la caché de memoria de Glide
+            .fitCenter()
+
+        Glide.with(requireContext())
+            .load(imageUrl)
+            .apply(requestOptions)
+            .into(imageView)*/
         return view
     }
 

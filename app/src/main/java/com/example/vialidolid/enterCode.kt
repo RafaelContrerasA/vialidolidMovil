@@ -165,7 +165,7 @@ class enterCode : AppCompatActivity() {
                 parametros["contraseña"] = intent.getStringExtra("contraseña").toString()
                 println(intent.getStringExtra("contraseña").toString())
                 parametros["telefono"] = intent.getStringExtra("telefono").toString()
-                println(intent.getStringExtra("contraseña").toString())
+                println(intent.getStringExtra("telefono").toString())
                 parametros["estado"] = intent.getStringExtra("estado").toString()
                 println(intent.getStringExtra("estado").toString())
                 parametros["ciudad"] = intent.getStringExtra("ciudad").toString()
