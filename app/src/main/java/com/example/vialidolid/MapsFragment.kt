@@ -34,6 +34,7 @@ import com.android.volley.toolbox.Volley
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.Marker
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.json.JSONArray
 import org.json.JSONException
 
@@ -70,6 +71,8 @@ class MapsFragment : Fragment() {
     private lateinit var imageButton: ImageButton
     private var isLinearLayoutVisible = false
 
+    //Boton para nuevo reporte en mapa
+    private lateinit var fabButton: FloatingActionButton
 
 
 
@@ -229,6 +232,13 @@ class MapsFragment : Fragment() {
             zoom = map.cameraPosition.zoom
         }
 
+        fabButton = view.findViewById(R.id.fabButton)
+        fabButton.setOnClickListener {
+            //Toast.makeText(requireContext(), "Hola", Toast.LENGTH_SHORT).show()
+            val Intent = Intent(requireActivity(),nuevo_reporte::class.java)
+            startActivity(Intent)
+        }
+
 
         return view
     }
@@ -314,7 +324,6 @@ class MapsFragment : Fragment() {
                     if(location != null){
                         val latLng = LatLng(location.latitude,location.longitude)
                         val markerOptions = MarkerOptions().position(latLng)
-                        //TODO agregar variable para que solo trackee si presionas boton centrar
                         if(trackUser)
                             map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom))
                     }
