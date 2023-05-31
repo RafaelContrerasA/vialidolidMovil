@@ -24,6 +24,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import androidx.appcompat.app.AlertDialog
 import android.provider.Settings
 import android.widget.CheckBox
+import android.widget.ImageButton
+import android.widget.LinearLayout
 import androidx.core.app.ActivityCompat.finishAffinity
 import com.android.volley.Request
 import com.android.volley.Response
@@ -60,6 +62,11 @@ class MapsFragment : Fragment() {
     private var maltratoAnimalChecked = true
     private var ooapasChecked = true
     private var vialChecked = true
+
+    //Boton para esconder y mostrar lista de filtro
+    private lateinit var linearLayout: LinearLayout
+    private lateinit var imageButton: ImageButton
+    private var isLinearLayoutVisible = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -200,6 +207,14 @@ class MapsFragment : Fragment() {
         cbVial.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) vialChecked=true else vialChecked=false
             actualizarMarcadores()
+        }
+
+        //listener de boton esconder/mostrar lista filtro
+        linearLayout = view.findViewById(R.id.linearLayout)
+        imageButton = view.findViewById(R.id.imageButton)
+
+        imageButton.setOnClickListener {
+            toggleLinearLayoutVisibility()
         }
 
 
@@ -404,6 +419,15 @@ class MapsFragment : Fragment() {
             }
         }
 
+    }
+    private fun toggleLinearLayoutVisibility() {
+        if (isLinearLayoutVisible) {
+            linearLayout.visibility = View.GONE
+            isLinearLayoutVisible = false
+        } else {
+            linearLayout.visibility = View.VISIBLE
+            isLinearLayoutVisible = true
+        }
     }
 
 }
