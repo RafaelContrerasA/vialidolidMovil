@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 import androidx.appcompat.app.AlertDialog
 import android.provider.Settings
+import android.widget.CheckBox
 import androidx.core.app.ActivityCompat.finishAffinity
 import com.android.volley.Request
 import com.android.volley.Response
@@ -46,6 +47,20 @@ class MapsFragment : Fragment() {
     public lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
     private lateinit var dataMap: HashMap<String, Marcador>
+
+    //Para el filtro
+    private lateinit var cbAlumbrado: CheckBox
+    private lateinit var cbBache: CheckBox
+    private lateinit var cbMaltratoAnimal: CheckBox
+    private lateinit var cbOoapas: CheckBox
+    private lateinit var cbVial: CheckBox
+
+    private var alumbradoChecked = true
+    private var bacheChecked = true
+    private var maltratoAnimalChecked = true
+    private var ooapasChecked = true
+    private var vialChecked = true
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -149,7 +164,46 @@ class MapsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_maps, container, false)
+        val view = inflater.inflate(R.layout.fragment_maps, container, false)
+
+        //Inicializar checkbox del filtro
+        cbAlumbrado = view.findViewById(R.id.cbAlumbrado)
+        cbBache = view.findViewById(R.id.cbBache)
+        cbMaltratoAnimal = view.findViewById(R.id.cbMaltratoAnimal)
+        cbOoapas = view.findViewById(R.id.cbOoapas)
+        cbVial= view.findViewById(R.id.cbVial)
+
+        //Colocar estado inicial en activado
+        cbAlumbrado.isChecked = true
+        cbBache.isChecked = true
+        cbMaltratoAnimal.isChecked = true
+        cbOoapas.isChecked = true
+        cbVial.isChecked = true
+
+        //Crear listeners
+        cbAlumbrado.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) alumbradoChecked=true else alumbradoChecked=false
+            actualizarMarcadores()
+        }
+        cbBache.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) bacheChecked=true else bacheChecked=false
+            actualizarMarcadores()
+        }
+        cbMaltratoAnimal.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) maltratoAnimalChecked=true else maltratoAnimalChecked=false
+            actualizarMarcadores()
+        }
+        cbOoapas.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) ooapasChecked=true else ooapasChecked=false
+            actualizarMarcadores()
+        }
+        cbVial.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) vialChecked=true else vialChecked=false
+            actualizarMarcadores()
+        }
+
+
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -235,7 +289,7 @@ class MapsFragment : Fragment() {
                         val markerOptions = MarkerOptions().position(latLng)
                         //TODO agregar variable para que solo trackee si presionas boton centrar
                         if(trackUser)
-                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom))
+                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom))
                     }
                 }
             }
@@ -298,10 +352,56 @@ class MapsFragment : Fragment() {
             map.addMarker(MarkerOptions().position(LatLng(reporte.latitud,reporte.longitud)).title(reporte.idReporte).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)))
 
             // println("ID del Reporte: $idReporte")
-           // println("Latitud: ${reporte.latitud}")
-           // println("Longitud: ${reporte.longitud}")
-           // println("Tipo de Reporte: ${reporte.tipoReporte}")
-           // println()
+            // println("Latitud: ${reporte.latitud}")
+            // println("Longitud: ${reporte.longitud}")
+            // println("Tipo de Reporte: ${reporte.tipoReporte}")
+            // println()
+        }
+
+    }
+
+    private fun actualizarMarcadores() {
+        // Limpiar los marcadores existentes en el mapa
+        map.clear()
+
+        // Crear marcadores solo para los tipos de reporte seleccionados
+        if(alumbradoChecked){
+            for ((idReporte, reporte) in dataMap) {
+                if (reporte.tipoReporte==1) {
+                    map.addMarker(MarkerOptions().position(LatLng(reporte.latitud, reporte.longitud)).title(reporte.idReporte).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)))
+                }
+            }
+        }
+
+        if(bacheChecked){
+            for ((idReporte, reporte) in dataMap) {
+                if (reporte.tipoReporte==2) {
+                    map.addMarker(MarkerOptions().position(LatLng(reporte.latitud, reporte.longitud)).title(reporte.idReporte).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)))
+                }
+            }
+        }
+
+        if(maltratoAnimalChecked){
+            for ((idReporte, reporte) in dataMap) {
+                if (reporte.tipoReporte==3) {
+                    map.addMarker(MarkerOptions().position(LatLng(reporte.latitud, reporte.longitud)).title(reporte.idReporte).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)))
+                }
+            }
+        }
+
+        if(ooapasChecked){
+            for ((idReporte, reporte) in dataMap) {
+                if (reporte.tipoReporte==4) {
+                    map.addMarker(MarkerOptions().position(LatLng(reporte.latitud, reporte.longitud)).title(reporte.idReporte).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)))
+                }
+            }
+        }
+        if(vialChecked){
+            for ((idReporte, reporte) in dataMap) {
+                if (reporte.tipoReporte==5) {
+                    map.addMarker(MarkerOptions().position(LatLng(reporte.latitud, reporte.longitud)).title(reporte.idReporte).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)))
+                }
+            }
         }
 
     }

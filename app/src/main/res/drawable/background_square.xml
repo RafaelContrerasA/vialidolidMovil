@@ -1,0 +1,4 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#ECECEC" /> <!-- Cambia el color de fondo según tus preferencias -->
+    <corners android:radius="8dp" /> <!-- Cambia el radio de las esquinas según tus preferencias -->
+</shape>
