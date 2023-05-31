@@ -39,8 +39,10 @@ import org.json.JSONException
 
 class MapsFragment : Fragment() {
     val coordenadas = mutableMapOf<String, LatLng>()
+    //Trackear ubicacion del usuario
     var trackUser = true
     var zoom = 15f
+    private lateinit var imageButtonUbicacion: ImageButton
 
     private lateinit var map : GoogleMap
     private var LOCATION_PERMISSION_REQUEST = 1
@@ -66,7 +68,9 @@ class MapsFragment : Fragment() {
     //Boton para esconder y mostrar lista de filtro
     private lateinit var linearLayout: LinearLayout
     private lateinit var imageButton: ImageButton
-    private var isLinearLayoutVisible = true
+    private var isLinearLayoutVisible = false
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -213,8 +217,16 @@ class MapsFragment : Fragment() {
         linearLayout = view.findViewById(R.id.linearLayout)
         imageButton = view.findViewById(R.id.imageButton)
 
+        linearLayout.visibility = View.GONE
         imageButton.setOnClickListener {
             toggleLinearLayoutVisibility()
+        }
+
+        //Listener boton trackear ubicación
+        imageButtonUbicacion = view.findViewById(R.id.imageButtonUbicacion)
+        imageButtonUbicacion.setOnClickListener {
+            trackUser = true
+            zoom = map.cameraPosition.zoom
         }
 
 
@@ -234,7 +246,7 @@ class MapsFragment : Fragment() {
                 android.Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            map.isMyLocationEnabled = true
+            //map.isMyLocationEnabled = true
             checkLocationEnabled()
             getLocationUpdates()
             startLocationUpdates()

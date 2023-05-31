@@ -6,20 +6,20 @@
     android:layout_height="match_parent">
 
 
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:context=".MapsFragment" />
+                    <fragment
+                        android:id="@+id/map"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:context=".MapsFragment" />
 
 
 
-        <!-- Agrega componentes visuales adicionales en el ConstraintLayout -->
+                    <!-- Agrega componentes visuales adicionales en el ConstraintLayout -->
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -28,6 +28,7 @@
         android:background="@drawable/background_square"
         android:orientation="vertical"
         android:padding="16dp"
+        android:backgroundTint="@color/morado_vialidolid"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageButton">
 
@@ -35,42 +36,58 @@
             android:id="@+id/cbAlumbrado"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:text="Alumbrado Público" />
 
         <CheckBox
             android:id="@+id/cbBache"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:text="Baches" />
 
         <CheckBox
             android:id="@+id/cbMaltratoAnimal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:text="Maltrato animal" />
 
         <CheckBox
             android:id="@+id/cbOoapas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:text="Ooapas" />
 
         <CheckBox
             android:id="@+id/cbVial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:text="Vial" />
 
     </LinearLayout>
 
     <ImageButton
         android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="164dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="56dp"
         android:layout_marginEnd="4dp"
-        android:src="@android:drawable/ic_menu_more"
+
+        android:src="@drawable/filter_menu"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButtonUbicacion"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+
+        android:layout_marginTop="12dp"
+        android:src="@drawable/crosshairs_gps"
+        app:layout_constraintStart_toStartOf="@+id/imageButton"
         app:layout_constraintTop_toTopOf="parent" />
 
 
