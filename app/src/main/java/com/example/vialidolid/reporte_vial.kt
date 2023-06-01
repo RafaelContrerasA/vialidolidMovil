@@ -1,14 +1,18 @@
 package com.example.vialidolid
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.location.Geocoder
 import android.location.Location
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Base64
 import android.view.View
 import android.widget.*
 import androidx.core.app.ActivityCompat
@@ -19,12 +23,17 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import java.io.ByteArrayOutputStream
 import java.util.*
 import kotlin.collections.HashMap
 
 class reporte_vial : AppCompatActivity() {
     var etDescripcion: EditText? = null
     var etReferencias: EditText? = null
+
+    var imageBitmap: Bitmap? = null
+    private var imageSelected: Bitmap? = null
+    private val GALLERY_REQUEST_CODE = 100
 
     //iniciar y obtener usuario del sharedPreference
     lateinit var sharedPreferences: SharedPreferences
@@ -90,6 +99,10 @@ class reporte_vial : AppCompatActivity() {
                 TODO("Not yet implemented")
             }
         }
+        val btImagen = findViewById<Button>(R.id.btImagen)
+        btImagen.setOnClickListener {
+            openGallery()
+        }
         val btCancelar = findViewById<Button>(R.id.btCancelar)
         btCancelar.setOnClickListener(View.OnClickListener {
             finish()
@@ -126,6 +139,7 @@ class reporte_vial : AppCompatActivity() {
                         parametros["colonia"] = colonia ?: ""
                         parametros["latitud"] = latitude.toString()
                         parametros["longitud"] = longitude.toString()
+                        parametros["imagen"] = imageSelected?.let { convertBitmapToBase64(it) } ?: ""
                         parametros["id_ciudadano"] = sharedPreferences.getString("uid", null)!!
                         return parametros
                     }
@@ -221,5 +235,28 @@ class reporte_vial : AppCompatActivity() {
                 showToast("Location permission denied")
             }
         }
+    }
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, GALLERY_REQUEST_CODE)
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == GALLERY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            val imageUri = data.data
+            imageSelected = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+        }
+    }
+
+    private fun convertBitmapToByteArray(bitmap: Bitmap): ByteArray {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+        return byteArrayOutputStream.toByteArray()
+    }
+    private fun convertBitmapToBase64(bitmap: Bitmap): String {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+        val imageBytes = byteArrayOutputStream.toByteArray()
+        return Base64.encodeToString(imageBytes, Base64.DEFAULT)
     }
 }
