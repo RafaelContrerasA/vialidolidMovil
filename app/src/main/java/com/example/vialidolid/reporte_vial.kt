@@ -125,6 +125,7 @@ class reporte_vial : AppCompatActivity() {
 
                 val resultadoPost = object : StringRequest(Request.Method.POST, url,
                     Response.Listener<String> { response ->
+                        println(response)
                         Toast.makeText(this@reporte_vial, "Reporte generado", Toast.LENGTH_LONG).show()
                         val intent = Intent(this@reporte_vial, reporte_comp::class.java)
                         startActivity(intent)

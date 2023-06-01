@@ -37,7 +37,7 @@
 
     <!--  Arreglo de categorias  -->
     <string-array name="categoria">
-        <item></item>
+        <item>Seleccionar problematica</item>
         <item>Alumbrado público</item>
         <item>Bache</item>
         <item>Maltrato animal</item>
