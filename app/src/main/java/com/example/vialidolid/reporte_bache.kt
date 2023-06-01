@@ -189,7 +189,7 @@ class reporte_bache : AppCompatActivity() {
                         longitude = location.longitude
                         val locationText = "Lat: $latitude, Long: $longitude"
                         var fullAddress = geocoder.getFromLocation(latitude, longitude, 1)
-                        showToast(locationText)
+                        //showToast(locationText)
                         if(fullAddress != null && fullAddress.isNotEmpty()){
                             //TODO borrar
                             println("Locale: ${fullAddress?.get(0)?.locale}")

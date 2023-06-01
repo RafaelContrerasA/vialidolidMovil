@@ -404,7 +404,7 @@ class MapsFragment : Fragment() {
         if(alumbradoChecked){
             for ((idReporte, reporte) in dataMap) {
                 if (reporte.tipoReporte==1) {
-                    map.addMarker(MarkerOptions().position(LatLng(reporte.latitud, reporte.longitud)).title(reporte.idReporte).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)))
+                    map.addMarker(MarkerOptions().position(LatLng(reporte.latitud, reporte.longitud)).title(reporte.idReporte).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)))
                 }
             }
         }
@@ -412,7 +412,7 @@ class MapsFragment : Fragment() {
         if(bacheChecked){
             for ((idReporte, reporte) in dataMap) {
                 if (reporte.tipoReporte==2) {
-                    map.addMarker(MarkerOptions().position(LatLng(reporte.latitud, reporte.longitud)).title(reporte.idReporte).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)))
+                    map.addMarker(MarkerOptions().position(LatLng(reporte.latitud, reporte.longitud)).title(reporte.idReporte).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)))
                 }
             }
         }
@@ -420,7 +420,7 @@ class MapsFragment : Fragment() {
         if(maltratoAnimalChecked){
             for ((idReporte, reporte) in dataMap) {
                 if (reporte.tipoReporte==3) {
-                    map.addMarker(MarkerOptions().position(LatLng(reporte.latitud, reporte.longitud)).title(reporte.idReporte).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)))
+                    map.addMarker(MarkerOptions().position(LatLng(reporte.latitud, reporte.longitud)).title(reporte.idReporte).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)))
                 }
             }
         }
@@ -428,7 +428,7 @@ class MapsFragment : Fragment() {
         if(ooapasChecked){
             for ((idReporte, reporte) in dataMap) {
                 if (reporte.tipoReporte==4) {
-                    map.addMarker(MarkerOptions().position(LatLng(reporte.latitud, reporte.longitud)).title(reporte.idReporte).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)))
+                    map.addMarker(MarkerOptions().position(LatLng(reporte.latitud, reporte.longitud)).title(reporte.idReporte).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)))
                 }
             }
         }
